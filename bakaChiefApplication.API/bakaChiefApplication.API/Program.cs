@@ -1,4 +1,6 @@
+using bakaChiefApplication.API.Options;
 using bakaChiefApplication.Extensions;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,11 +14,18 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext(builder.Configuration);
 builder.Services.AddRepositories();
 builder.Services.AddServices();
+builder.Services.AddConfigurations(builder.Configuration);
 
 var app = builder.Build();
 
+bool enableFeaturesConfiguration;
+if(!bool.TryParse(builder.Configuration["EnableFeatures:IsEnableSwagger"], out enableFeaturesConfiguration))
+{
+    enableFeaturesConfiguration = false;
+}
+
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (enableFeaturesConfiguration)
 {
     app.UseSwagger();
     app.UseSwaggerUI();
