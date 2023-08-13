@@ -1,0 +1,101 @@
+# Default values for hello-world.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+applicationName: baka-chief
+
+replicaCount: 1
+
+image:
+  repository: bakayarusama/baka-chief
+  pullPolicy: Always
+  # pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "1.0.1"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: 
+  kompose.cmd: kompose convert
+  kompose.version: 1.26.0 (40646f47)
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+volumeMounts:
+  - mountPath: /https/
+    name: certificate
+
+volumes:
+  - name: certificate
+    persistentVolumeClaim:
+      claimName: certificate-claim
+
+service:
+  type: NodePort
+  port: 3535
+
+ingress:
+  enabled: true
+  className: ""
+  annotations:
+    # kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    # kubernetes.io/tls-acme: "true"
+  host: baka-chief.ddns.net
+  
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+environmentVar:
+  - name: ASPNETCORE_ENVIRONMENT
+    value: "Production"
+
+  - name: ASPNETCORE_HTTPS_PORT
+    value: "3535"
+
+  - name: ASPNETCORE_Kestrel__Certificates__Default__KeyPath
+    value: "/https/private.key"
+
+  - name: ASPNETCORE_Kestrel__Certificates__Default__Path
+    value: "/https/certificate.crt"
+
+  - name: ASPNETCORE_URLS
+    value: "https://+:3535"
