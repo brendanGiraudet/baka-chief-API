@@ -1,6 +1,5 @@
-using bakaChiefApplication.API.Options;
 using bakaChiefApplication.Extensions;
-using Microsoft.Extensions.Configuration;
+using Login.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,8 +17,11 @@ builder.Services.AddConfigurations(builder.Configuration);
 
 var app = builder.Build();
 
+// apply migrations
+app.ApplyDatabaseMigrations();
+
 bool enableFeaturesConfiguration;
-if(!bool.TryParse(builder.Configuration["EnableFeatures:IsEnableSwagger"], out enableFeaturesConfiguration))
+if (!bool.TryParse(builder.Configuration["EnableFeatures:IsEnableSwagger"], out enableFeaturesConfiguration))
 {
     enableFeaturesConfiguration = false;
 }

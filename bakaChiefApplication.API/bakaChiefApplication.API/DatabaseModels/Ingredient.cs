@@ -2,13 +2,15 @@
 
 namespace bakaChiefApplication.API.DatabaseModels
 {
-    public class NutrimentType
+    public class Ingredient
     {
         [Key]
         public string Id { get; set; } = Guid.NewGuid().ToString();
-
+        
         public string Name { get; set; }
-
-        public HashSet<IngredientNutrimentType> Ingredients { get; set; }
+        
+        public string Image { get; set; }
+        
+        public HashSet<IngredientNutrimentType> NutrimentTypes { get; set; }
     }
 }
