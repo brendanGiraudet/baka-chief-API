@@ -1,10 +1,11 @@
+using bakaChiefApplication.API.DatabaseModels;
 using bakaChiefApplication.API.Services.NutrimentTypeService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace bakaChiefApplication.API.Controllers
 {
+    [Route("api/nutrimentType")]
     [ApiController]
-    [Route("nutrimentType")]
     public class NutrimentTypeController : ControllerBase
     {
         private readonly INutrimentTypeService _nutrimentTypeService;
@@ -14,14 +15,48 @@ namespace bakaChiefApplication.API.Controllers
             _nutrimentTypeService = nutrimentTypeService;
         }
 
-        [HttpGet(Name = "GetNutrimentType")]
-        public async Task<IActionResult> Get()
+        [HttpPost]
+        public async Task<IActionResult> CreateNutrimentType(NutrimentType nutrimentType)
+        {
+            await _nutrimentTypeService.CreateNutrimentTypeAsync(nutrimentType);
+            return Ok();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<NutrimentType>> GetNutrimentTypeById(string id)
+        {
+            var nutrimentType = await _nutrimentTypeService.GetNutrimentTypeByIdAsync(id);
+            if (nutrimentType == null)
+            {
+                return NotFound();
+            }
+            return Ok(nutrimentType);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<NutrimentType>>> GetAllNutrimentTypes()
         {
             var nutrimentTypes = await _nutrimentTypeService.GetAllNutrimentTypesAsync();
+            return Ok(nutrimentTypes);
+        }
 
-            if (nutrimentTypes.Count == 0) return NoContent();
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateNutrimentType(string id, NutrimentType nutrimentType)
+        {
+            if (id != nutrimentType.Id)
+            {
+                return BadRequest();
+            }
 
-            return StatusCode(StatusCodes.Status200OK, nutrimentTypes);
+            await _nutrimentTypeService.UpdateNutrimentTypeAsync(nutrimentType);
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteNutrimentType(string id)
+        {
+            await _nutrimentTypeService.DeleteNutrimentTypeAsync(id);
+            return Ok();
         }
     }
 }
