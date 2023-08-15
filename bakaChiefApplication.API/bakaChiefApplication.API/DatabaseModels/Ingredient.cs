@@ -12,5 +12,7 @@ namespace bakaChiefApplication.API.DatabaseModels
         public string Image { get; set; }
 
         public ICollection<NutrimentType>? NutrimentTypes { get; set; }
+        
+        public ICollection<RecipIngredient>? RecipIngredients { get; set; }
     }
 }

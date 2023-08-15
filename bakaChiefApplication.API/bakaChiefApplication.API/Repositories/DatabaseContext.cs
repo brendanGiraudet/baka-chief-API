@@ -13,7 +13,14 @@ namespace bakaChiefApplication.API.Repositories
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            
             modelBuilder.Entity<Ingredient>().HasMany(i => i.NutrimentTypes).WithMany(j => j.Ingredients);
+            
+            modelBuilder.Entity<Ingredient>().HasMany(i => i.RecipIngredients).WithOne(j => j.Ingredient);
+            
+            modelBuilder.Entity<Recip>().HasMany(i => i.RecipIngredients).WithOne(j => j.Recip);
+            
+            modelBuilder.Entity<Recip>().HasMany(i => i.RecipSteps).WithOne(j => j.Recip);
         }
 
 
@@ -26,5 +33,20 @@ namespace bakaChiefApplication.API.Repositories
         /// Gets or sets the <see cref="DbSet{Ingredient}"/>.
         /// </summary>
         public virtual DbSet<Ingredient> Ingredients { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the <see cref="DbSet{RecipIngredient}"/>.
+        /// </summary>
+        public virtual DbSet<RecipIngredient> RecipIngredients { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the <see cref="DbSet{Recip}"/>.
+        /// </summary>
+        public virtual DbSet<Recip> Recips { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the <see cref="DbSet{RecipStep}"/>.
+        /// </summary>
+        public virtual DbSet<RecipStep> RecipSteps { get; set; }
     }
 }
