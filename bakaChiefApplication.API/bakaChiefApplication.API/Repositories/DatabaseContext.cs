@@ -20,8 +20,13 @@ namespace bakaChiefApplication.API.Repositories
 
 
         /// <summary>
-        /// Gets or sets the <see cref="DbSet{NutrimentType}"/> of NutrimentType.
+        /// Gets or sets the <see cref="DbSet{NutrimentType}"/>.
         /// </summary>
         public virtual DbSet<NutrimentType> NutrimentTypes { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the <see cref="DbSet{Ingredient}"/>.
+        /// </summary>
+        public virtual DbSet<Ingredient> Ingredients { get; set; }
     }
 }

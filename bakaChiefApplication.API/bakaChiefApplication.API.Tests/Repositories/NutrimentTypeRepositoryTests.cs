@@ -9,7 +9,6 @@ namespace bakaChiefApplication.API.Tests.Repositories
     {
         private DbContextOptions<DatabaseContext> _options;
         private DatabaseContext _dbContext;
-        private INutrimentTypeRepository _repository;
 
         public NutrimentTypeRepositoryTests()
         {
@@ -23,22 +22,26 @@ namespace bakaChiefApplication.API.Tests.Repositories
             _dbContext = new DatabaseContext(_options);
             _dbContext.Database.EnsureDeleted();
             _dbContext.Database.EnsureCreated();
+        }
 
-            _repository = new NutrimentTypeRepository(_dbContext);
+        private INutrimentTypeRepository GetNutrimentTypeRepository()
+        {
+            InitializeDbContext();
+            return new NutrimentTypeRepository(_dbContext);
         }
 
         [Fact]
         public async Task CreateNutrimentType_ShouldAddNewNutrimentType()
         {
             // Arrange
-            InitializeDbContext();
+            var repository = GetNutrimentTypeRepository();
             var nutrimentType = new NutrimentType
             {
                 Name = "Vitamin C"
             };
 
             // Act
-            await _repository.CreateNutrimentTypeAsync(nutrimentType);
+            await repository.CreateNutrimentTypeAsync(nutrimentType);
 
             // Assert
             Assert.Equal(1, _dbContext.NutrimentTypes.Count());
@@ -48,7 +51,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
         public async Task GetNutrimentTypeById_ShouldReturnCorrectNutrimentType()
         {
             // Arrange
-            InitializeDbContext();
+            var repository = GetNutrimentTypeRepository();
             var nutrimentType = new NutrimentType
             {
                 Name = "Protein"
@@ -57,7 +60,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await _repository.GetNutrimentTypeByIdAsync(nutrimentType.Id);
+            var result = await repository.GetNutrimentTypeByIdAsync(nutrimentType.Id);
 
             // Assert
             Assert.NotNull(result);
@@ -68,7 +71,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
         public async Task GetAllNutrimentTypes_ShouldReturnAllNutrimentTypes()
         {
             // Arrange
-            InitializeDbContext();
+            var repository = GetNutrimentTypeRepository();
             var nutrimentType1 = new NutrimentType
             {
                 Name = "Fiber"
@@ -81,7 +84,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await _repository.GetAllNutrimentTypesAsync();
+            var result = await repository.GetAllNutrimentTypesAsync();
 
             // Assert
             Assert.Equal(2, result.Count);
@@ -93,7 +96,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
         public async Task UpdateNutrimentType_ShouldUpdateNutrimentType()
         {
             // Arrange
-            InitializeDbContext();
+            var repository = GetNutrimentTypeRepository();
             var nutrimentType = new NutrimentType
             {
                 Name = "Iron"
@@ -103,7 +106,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
 
             // Act
             nutrimentType.Name = "Zinc";
-            await _repository.UpdateNutrimentTypeAsync(nutrimentType);
+            await repository.UpdateNutrimentTypeAsync(nutrimentType);
 
             // Assert
             var updatedNutrimentType = await _dbContext.NutrimentTypes.FindAsync(nutrimentType.Id);
@@ -115,7 +118,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
         public async Task DeleteNutrimentType_ShouldDeleteNutrimentType()
         {
             // Arrange
-            InitializeDbContext();
+            var repository = GetNutrimentTypeRepository();
             var nutrimentType = new NutrimentType
             {
                 Name = "Vitamin A"
@@ -124,7 +127,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
             await _dbContext.SaveChangesAsync();
 
             // Act
-            await _repository.DeleteNutrimentTypeAsync(nutrimentType.Id);
+            await repository.DeleteNutrimentTypeAsync(nutrimentType.Id);
 
             // Assert
             var deletedNutrimentType = await _dbContext.NutrimentTypes.FindAsync(nutrimentType.Id);
