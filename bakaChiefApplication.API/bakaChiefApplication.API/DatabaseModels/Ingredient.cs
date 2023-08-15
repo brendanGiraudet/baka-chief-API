@@ -10,7 +10,7 @@ namespace bakaChiefApplication.API.DatabaseModels
         public string Name { get; set; }
         
         public string Image { get; set; }
-        
-        public HashSet<IngredientNutrimentType> NutrimentTypes { get; set; }
+
+        public ICollection<NutrimentType>? NutrimentTypes { get; set; }
     }
 }

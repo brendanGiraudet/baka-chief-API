@@ -2,6 +2,7 @@
 using bakaChiefApplication.API.Repositories;
 using bakaChiefApplication.API.Repositories.IngredientRepository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace bakaChiefApplication.API.Tests.Repositories
 {
@@ -14,6 +15,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
         {
             _options = new DbContextOptionsBuilder<DatabaseContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
                 .Options;
         }
 

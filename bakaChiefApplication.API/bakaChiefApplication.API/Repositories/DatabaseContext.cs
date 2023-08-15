@@ -10,12 +10,10 @@ namespace bakaChiefApplication.API.Repositories
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
-            // Customize the ASP.NET Identity model and override the defaults if needed.
-            // For example, you can rename the ASP.NET Identity table names and more.
-            // Add your customizations after calling base.OnModelCreating(builder);
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Ingredient>().HasMany(i => i.NutrimentTypes).WithMany(j => j.Ingredients);
         }
 
 
@@ -23,7 +21,7 @@ namespace bakaChiefApplication.API.Repositories
         /// Gets or sets the <see cref="DbSet{NutrimentType}"/>.
         /// </summary>
         public virtual DbSet<NutrimentType> NutrimentTypes { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the <see cref="DbSet{Ingredient}"/>.
         /// </summary>
