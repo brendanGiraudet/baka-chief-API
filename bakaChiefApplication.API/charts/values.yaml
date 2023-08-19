@@ -2,12 +2,12 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-applicationName: baka-chief
+applicationName: baka-chief-api
 
 replicaCount: 1
 
 image:
-  repository: bakayarusama/baka-chief
+  repository: bakayarusama/baka-chief-api
   pullPolicy: Always
   # pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
@@ -43,7 +43,7 @@ volumes:
 
 service:
   type: NodePort
-  port: 3535
+  port: 3636
 
 ingress:
   enabled: true
@@ -52,7 +52,7 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     # kubernetes.io/tls-acme: "true"
-  host: baka-chief.ddns.net
+  host: baka-chief-api.ddns.net
   
   tls: []
   #  - secretName: chart-example-tls
@@ -89,7 +89,7 @@ environmentVar:
     value: "Production"
 
   - name: ASPNETCORE_HTTPS_PORT
-    value: "3535"
+    value: "3636"
 
   - name: ASPNETCORE_Kestrel__Certificates__Default__KeyPath
     value: "/https/private.key"
@@ -98,4 +98,10 @@ environmentVar:
     value: "/https/certificate.crt"
 
   - name: ASPNETCORE_URLS
-    value: "https://+:3535"
+    value: "https://+:3636"
+    
+  - name: EnableFeatures__IsEnableSwagger
+    value: "true"
+
+  - name: ConnectionStrings__Database
+    value: "Data Source=./Repositories/database.db"
