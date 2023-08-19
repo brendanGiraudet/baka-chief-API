@@ -32,7 +32,7 @@ jobs:
     needs: [Continuous-integration]
     runs-on: ubuntu-latest
     env:
-      Repo: /home/runner/work/baka-chief-API/baka-chief-API/bakaChiefApplication.API/bakaChiefApplication.API/
+      Repo: /home/runner/work/baka-chief-API/baka-chief-API/bakaChiefApplication.API/
       DockerImageName: bakayarusama/music_player:${{  github.ref_name }}
 
     steps:
@@ -44,7 +44,7 @@ jobs:
              -p ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
     - name: Build Docker image
-      working-directory: /home/runner/work/baka-chief-API/baka-chief-API/bakaChiefApplication.API/bakaChiefApplication.API/
+      working-directory: /home/runner/work/baka-chief-API/baka-chief-API/bakaChiefApplication.API/
       run: docker build -t $DockerImageName $Repo
 
     - name: Publish Docker image
