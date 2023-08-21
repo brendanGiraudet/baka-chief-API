@@ -7,14 +7,15 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["./bakaChiefApplication.API.csproj", "bakaChiefApplication.API/"]
-RUN dotnet restore "bakaChiefApplication.API/bakaChiefApplication.API.csproj"
-COPY . .
+COPY ["./bakaChiefApplication.API.csproj", "./bakaChiefApplication.API/"]
+#RUN dotnet restore "/src/bakaChiefApplication.API/bakaChiefApplication.API.csproj"
+#COPY . .
 WORKDIR "/src/bakaChiefApplication.API"
-RUN dotnet build "bakaChiefApplication.API.csproj" -c Release -o /app/build
+RUN dotnet build "/src/bakaChiefApplication.API/bakaChiefApplication.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "bakaChiefApplication.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+WORKDIR "/src/bakaChiefApplication.API"
+RUN dotnet publish "/src/bakaChiefApplication.API/bakaChiefApplication.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
