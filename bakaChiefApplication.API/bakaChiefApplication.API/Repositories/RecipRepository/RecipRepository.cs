@@ -9,17 +9,26 @@ namespace bakaChiefApplication.API.Repositories.RecipRepository
 
         public RecipRepository(DatabaseContext dbContext)
         {
-            _dbContext = dbContext;
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
         public async Task<IEnumerable<Recip>> GetAllRecipsAsync()
         {
-            return await _dbContext.Recips.ToListAsync();
+            return await Task.FromResult(_dbContext.Recips
+                .Include(r => r.RecipIngredients)
+                    .ThenInclude(ri => ri.Ingredient)
+                        .ThenInclude(i => i.NutrimentTypes)
+                .Include(r => r.RecipSteps));
         }
 
         public async Task<Recip> GetRecipByIdAsync(string id)
         {
-            return await _dbContext.Recips.FindAsync(id);
+            return await _dbContext.Recips
+                .Include(r => r.RecipIngredients)
+                    .ThenInclude(ri => ri.Ingredient)
+                        .ThenInclude(i => i.NutrimentTypes)
+                .Include(r => r.RecipSteps)
+                .FirstOrDefaultAsync(r => r.Id == id);
         }
 
         public async Task AddRecipAsync(Recip recip)
