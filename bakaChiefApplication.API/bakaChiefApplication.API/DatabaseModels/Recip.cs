@@ -11,7 +11,7 @@ namespace bakaChiefApplication.API.DatabaseModels
         
         public int  PersonsNumber { get; set; }
         
-        public string ImageFilePath { get; set; }
+        public string? ImageFilePath { get; set; }
         
         public ICollection<RecipIngredient> RecipIngredients { get; set; }
         
