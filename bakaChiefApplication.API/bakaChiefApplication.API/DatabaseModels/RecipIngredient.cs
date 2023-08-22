@@ -13,6 +13,6 @@ namespace bakaChiefApplication.API.DatabaseModels
         
         public string MeasureUnit { get; set; }
 
-        public Recip Recip { get; set; }
+        public Recip? Recip { get; set; }
     }
 }

@@ -11,6 +11,6 @@ namespace bakaChiefApplication.API.DatabaseModels
         
         public string Description { get; set; }
 
-        public Recip Recip { get; set; }
+        public Recip? Recip { get; set; }
     }
 }
