@@ -18,10 +18,22 @@ builder.Services.AddRepositories();
 builder.Services.AddServices();
 builder.Services.AddConfigurations(builder.Configuration);
 
+builder.Services.AddCors(c =>
+{
+    c.AddDefaultPolicy(pol =>
+    {
+        pol.AllowAnyMethod();
+        pol.AllowAnyHeader();
+        pol.AllowAnyOrigin();
+    });
+});
+
 var app = builder.Build();
 
 // apply migrations
 app.ApplyDatabaseMigrations();
+
+app.UseCors();
 
 bool enableFeaturesConfiguration;
 if (!bool.TryParse(builder.Configuration["EnableFeatures:IsEnableSwagger"], out enableFeaturesConfiguration))
