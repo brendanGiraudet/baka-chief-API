@@ -31,8 +31,23 @@ namespace bakaChiefApplication.API.Repositories.NutrimentTypeRepository
 
         public async Task UpdateNutrimentTypeAsync(NutrimentType nutrimentType)
         {
-            _dbContext.NutrimentTypes.Update(nutrimentType);
-            await _dbContext.SaveChangesAsync();
+            using (var dbContextTransaction = _dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    await DeleteNutrimentTypeAsync(nutrimentType.Id);
+
+                    await CreateNutrimentTypeAsync(nutrimentType);
+
+                    await dbContextTransaction.CommitAsync();
+
+                }
+                catch (Exception ex)
+                {
+                    await dbContextTransaction.RollbackAsync();
+                }
+            }
+
         }
 
         public async Task DeleteNutrimentTypeAsync(string id)
@@ -45,6 +60,4 @@ namespace bakaChiefApplication.API.Repositories.NutrimentTypeRepository
             }
         }
     }
-
-
 }
