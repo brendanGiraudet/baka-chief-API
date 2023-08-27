@@ -19,7 +19,8 @@ namespace bakaChiefApplication.API.Controllers
         public async Task<IActionResult> CreateIngredient(Ingredient ingredient)
         {
             await _ingredientService.CreateIngredientAsync(ingredient);
-            return Ok();
+
+            return StatusCode(StatusCodes.Status201Created, ingredient);
         }
 
         [HttpGet("{id}")]

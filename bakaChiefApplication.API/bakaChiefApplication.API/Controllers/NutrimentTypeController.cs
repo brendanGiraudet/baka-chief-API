@@ -19,7 +19,8 @@ namespace bakaChiefApplication.API.Controllers
         public async Task<IActionResult> CreateNutrimentType(NutrimentType nutrimentType)
         {
             await _nutrimentTypeService.CreateNutrimentTypeAsync(nutrimentType);
-            return Ok();
+
+            return StatusCode(StatusCodes.Status201Created, nutrimentType);
         }
 
         [HttpGet("{id}")]
@@ -28,7 +29,7 @@ namespace bakaChiefApplication.API.Controllers
             var nutrimentType = await _nutrimentTypeService.GetNutrimentTypeByIdAsync(id);
             if (nutrimentType == null)
             {
-                return NotFound();
+                return NotFound($"The nutriment type { id } doesn't exist");
             }
             return Ok(nutrimentType);
         }
