@@ -20,13 +20,10 @@ namespace bakaChiefApplication.API.Repositories.IngredientRepository
 
         public async Task<Ingredient> GetIngredientByIdAsync(string id)
         {
-            return await _dbContext.Ingredients.Include(i => i.NutrimentTypes).FirstOrDefaultAsync(i => i.Id == id);
+            return await _dbContext.Ingredients.AsNoTracking().Include(t => t.NutrimentTypes).FirstOrDefaultAsync(i => i.Id == id);
         }
 
-        public async Task<List<Ingredient>> GetAllIngredientsAsync()
-        {
-            return await _dbContext.Ingredients.Include(i => i.NutrimentTypes).ToListAsync();
-        }
+        public async Task<List<Ingredient>> GetAllIngredientsAsync() => _dbContext.Ingredients.Include(t => t.NutrimentTypes).AsNoTracking().ToList();
 
         public async Task UpdateIngredientAsync(Ingredient ingredient)
         {

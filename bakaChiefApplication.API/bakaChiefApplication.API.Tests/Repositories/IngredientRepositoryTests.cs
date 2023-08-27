@@ -40,7 +40,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
             var ingredient = new Ingredient
             {
                 Name = "IngredientName",
-                Image = "ImageURL"
+                SvgImage = "ImageURL"
             };
 
             // Act
@@ -58,7 +58,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
             var ingredient = new Ingredient
             {
                 Name = "IngredientName",
-                Image = "ImageURL"
+                SvgImage = "ImageURL"
             };
             _dbContext.Ingredients.Add(ingredient);
             await _dbContext.SaveChangesAsync();
@@ -76,15 +76,38 @@ namespace bakaChiefApplication.API.Tests.Repositories
         {
             // Arrange
             var repository = GetRepository();
+
+            var nutriment1 = new NutrimentType
+            {
+                Id = "nutri1",
+                Name = "Testnutri1"
+            };
+
+            var nutriment2 = new NutrimentType
+            {
+                Id = "nutri2",
+                Name = "Testnutri2"
+            };
+
+            await _dbContext.SaveChangesAsync();
+
+            _dbContext.NutrimentTypes.AddRange(nutriment1, nutriment2);
+
             var ingredient1 = new Ingredient
             {
+                Id = "test1",
                 Name = "Ingredient1",
-                Image = "ImageURL1"
+                SvgImage = "ImageURL1",
+                NutrimentTypes = new List<NutrimentType>()
+                {
+                    nutriment1,
+                    nutriment2
+                }
             };
             var ingredient2 = new Ingredient
             {
                 Name = "Ingredient2",
-                Image = "ImageURL2"
+                SvgImage = "ImageURL2"
             };
             _dbContext.Ingredients.AddRange(ingredient1, ingredient2);
             await _dbContext.SaveChangesAsync();
@@ -96,6 +119,11 @@ namespace bakaChiefApplication.API.Tests.Repositories
             Assert.Equal(2, result.Count);
             Assert.Contains(result, i => i.Name == "Ingredient1");
             Assert.Contains(result, i => i.Name == "Ingredient2");
+
+            var ingredient = result.Find(f => f.Id == "test1");
+            Assert.NotEmpty(ingredient.NutrimentTypes);
+            Assert.Contains(ingredient.NutrimentTypes, i => i.Name == "Testnutri1");
+            Assert.Contains(ingredient.NutrimentTypes, i => i.Name == "Testnutri2");
         }
 
         [Fact]
@@ -106,7 +134,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
             var ingredient = new Ingredient
             {
                 Name = "OldName",
-                Image = "OldImage"
+                SvgImage = "OldImage"
             };
             _dbContext.Ingredients.Add(ingredient);
             await _dbContext.SaveChangesAsync();
@@ -129,7 +157,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
             var ingredient = new Ingredient
             {
                 Name = "IngredientToDelete",
-                Image = "ImageURL"
+                SvgImage = "ImageURL"
             };
             _dbContext.Ingredients.Add(ingredient);
             await _dbContext.SaveChangesAsync();

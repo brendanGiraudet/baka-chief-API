@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -35,14 +35,13 @@ app.ApplyDatabaseMigrations();
 
 app.UseCors();
 
-bool enableFeaturesConfiguration;
-if (!bool.TryParse(builder.Configuration["EnableFeatures:IsEnableSwagger"], out enableFeaturesConfiguration))
+bool enableSwagger;
+if (!bool.TryParse(builder.Configuration["EnableFeatures:IsEnableSwagger"], out enableSwagger))
 {
-    enableFeaturesConfiguration = false;
+    enableSwagger = false;
 }
 
-// Configure the HTTP request pipeline.
-if (enableFeaturesConfiguration)
+if (enableSwagger)
 {
     app.UseSwagger();
     app.UseSwaggerUI();
