@@ -18,10 +18,7 @@ namespace bakaChiefApplication.API.Repositories.IngredientRepository
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<Ingredient> GetIngredientByIdAsync(string id)
-        {
-            return await _dbContext.Ingredients.Include(t => t.NutrimentTypes).AsNoTracking().FirstOrDefaultAsync(i => i.Id == id);
-        }
+        public async Task<Ingredient> GetIngredientByIdAsync(string id)=> await _dbContext.Ingredients.Include(t => t.NutrimentTypes).AsNoTracking().FirstOrDefaultAsync(i => i.Id == id);
 
         public async Task<List<Ingredient>> GetAllIngredientsAsync() => _dbContext.Ingredients.Include(t => t.NutrimentTypes).AsNoTracking().ToList();
 
@@ -47,7 +44,7 @@ namespace bakaChiefApplication.API.Repositories.IngredientRepository
 
         public async Task DeleteIngredientAsync(string id)
         {
-            var ingredient = await _dbContext.Ingredients.FindAsync(id);
+            var ingredient = await GetIngredientByIdAsync(id);
             if (ingredient != null)
             {
                 _dbContext.Ingredients.Remove(ingredient);

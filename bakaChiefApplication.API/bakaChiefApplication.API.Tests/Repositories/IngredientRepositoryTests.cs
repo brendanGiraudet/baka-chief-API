@@ -37,10 +37,29 @@ namespace bakaChiefApplication.API.Tests.Repositories
         {
             // Arrange
             var repository = GetRepository();
+
+            var nutriment1 = new NutrimentType
+            {
+                Id = "nutri1",
+                Name = "Testnutri1"
+            };
+
+            var nutriment2 = new NutrimentType
+            {
+                Id = "nutri2",
+                Name = "Testnutri2"
+            };
+
+            await _dbContext.SaveChangesAsync();
+
             var ingredient = new Ingredient
             {
                 Name = "IngredientName",
-                SvgImage = "ImageURL"
+                SvgImage = "ImageURL",
+                NutrimentTypes = new[] { 
+                    nutriment1,
+                    nutriment2
+                }
             };
 
             // Act
