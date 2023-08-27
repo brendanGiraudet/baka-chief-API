@@ -396,3 +396,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/bakaChiefApplication.API/bakaChiefApplication.API/Repositories/database.db
