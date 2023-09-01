@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace bakaChiefApplication.API.Controllers
 {
-    [Route("api/nutrimentType")]
+    [Route("api/nutrimentTypes")]
     [ApiController]
     public class NutrimentTypeController : ControllerBase
     {

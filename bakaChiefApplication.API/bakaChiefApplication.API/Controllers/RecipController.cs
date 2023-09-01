@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace bakaChiefApplication.API.Controllers
 {
-    [Route("api/recip")]
+    [Route("api/recips")]
     [ApiController]
     public class RecipController : ControllerBase
     {
