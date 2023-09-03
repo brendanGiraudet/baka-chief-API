@@ -55,7 +55,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
             var ingredient = new Ingredient
             {
                 Name = "IngredientName",
-                SvgImage = "ImageURL",
+                ImageUrl = "ImageURL",
                 NutrimentTypes = new[] { 
                     nutriment1,
                     nutriment2
@@ -77,7 +77,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
             var ingredient = new Ingredient
             {
                 Name = "IngredientName",
-                SvgImage = "ImageURL"
+                ImageUrl = "ImageURL"
             };
             _dbContext.Ingredients.Add(ingredient);
             await _dbContext.SaveChangesAsync();
@@ -116,7 +116,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
             {
                 Id = "test1",
                 Name = "Ingredient1",
-                SvgImage = "ImageURL1",
+                ImageUrl = "ImageURL1",
                 NutrimentTypes = new List<NutrimentType>()
                 {
                     nutriment1,
@@ -126,7 +126,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
             var ingredient2 = new Ingredient
             {
                 Name = "Ingredient2",
-                SvgImage = "ImageURL2"
+                ImageUrl = "ImageURL2"
             };
             _dbContext.Ingredients.AddRange(ingredient1, ingredient2);
             await _dbContext.SaveChangesAsync();
@@ -153,7 +153,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
             var ingredient = new Ingredient
             {
                 Name = "OldName",
-                SvgImage = "OldImage"
+                ImageUrl = "OldImage"
             };
             _dbContext.Ingredients.Add(ingredient);
             await _dbContext.SaveChangesAsync();
@@ -176,7 +176,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
             var ingredient = new Ingredient
             {
                 Name = "IngredientToDelete",
-                SvgImage = "ImageURL"
+                ImageUrl = "ImageURL"
             };
             _dbContext.Ingredients.Add(ingredient);
             await _dbContext.SaveChangesAsync();
