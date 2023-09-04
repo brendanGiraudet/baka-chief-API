@@ -11,7 +11,7 @@ namespace bakaChiefApplication.API.DatabaseModels
         
         public string? ImageUrl { get; set; }
 
-        public ICollection<NutrimentType> NutrimentTypes { get; set; } = new HashSet<NutrimentType>();
+        public ICollection<Nutriment> Nutriments { get; set; } = new HashSet<Nutriment>();
         
         public ICollection<RecipIngredient>? RecipIngredients { get; set; }
     }

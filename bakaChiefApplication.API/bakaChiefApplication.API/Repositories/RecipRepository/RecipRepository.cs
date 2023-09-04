@@ -17,7 +17,7 @@ namespace bakaChiefApplication.API.Repositories.RecipRepository
             return await Task.FromResult(_dbContext.Recips
                 .Include(r => r.RecipIngredients)
                     .ThenInclude(ri => ri.Ingredient)
-                        .ThenInclude(i => i.NutrimentTypes)
+                        .ThenInclude(i => i.Nutriments)
                 .Include(r => r.RecipSteps));
         }
 
@@ -26,7 +26,7 @@ namespace bakaChiefApplication.API.Repositories.RecipRepository
             return await _dbContext.Recips
                 .Include(r => r.RecipIngredients)
                     .ThenInclude(ri => ri.Ingredient)
-                        .ThenInclude(i => i.NutrimentTypes)
+                        .ThenInclude(i => i.Nutriments)
                 .Include(r => r.RecipSteps)
                 .FirstOrDefaultAsync(r => r.Id == id);
         }

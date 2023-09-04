@@ -14,7 +14,7 @@ namespace bakaChiefApplication.API.Repositories
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<NutrimentType>().HasMany(n => n.Ingredients).WithMany(i => i.NutrimentTypes);
+            modelBuilder.Entity<Nutriment>().HasMany(n => n.Ingredients).WithMany(i => i.Nutriments);
             
             modelBuilder.Entity<Ingredient>().HasMany(i => i.RecipIngredients).WithOne(j => j.Ingredient);
             
@@ -27,7 +27,7 @@ namespace bakaChiefApplication.API.Repositories
         /// <summary>
         /// Gets or sets the <see cref="DbSet{NutrimentType}"/>.
         /// </summary>
-        public virtual DbSet<NutrimentType> NutrimentTypes { get; set; }
+        public virtual DbSet<Nutriment> Nutriments { get; set; }
 
         ///// <summary>
         ///// Gets or sets the <see cref="DbSet{IngredientNutrimentType}"/>.

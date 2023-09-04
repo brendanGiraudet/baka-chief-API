@@ -38,13 +38,13 @@ namespace bakaChiefApplication.API.Tests.Repositories
             // Arrange
             var repository = GetRepository();
 
-            var nutriment1 = new NutrimentType
+            var nutriment1 = new Nutriment
             {
                 Id = "nutri1",
                 Name = "Testnutri1"
             };
 
-            var nutriment2 = new NutrimentType
+            var nutriment2 = new Nutriment
             {
                 Id = "nutri2",
                 Name = "Testnutri2"
@@ -56,7 +56,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
             {
                 Name = "IngredientName",
                 ImageUrl = "ImageURL",
-                NutrimentTypes = new[] { 
+                Nutriments = new[] { 
                     nutriment1,
                     nutriment2
                 }
@@ -96,13 +96,13 @@ namespace bakaChiefApplication.API.Tests.Repositories
             // Arrange
             var repository = GetRepository();
 
-            var nutriment1 = new NutrimentType
+            var nutriment1 = new Nutriment
             {
                 Id = "nutri1",
                 Name = "Testnutri1"
             };
 
-            var nutriment2 = new NutrimentType
+            var nutriment2 = new Nutriment
             {
                 Id = "nutri2",
                 Name = "Testnutri2"
@@ -110,14 +110,14 @@ namespace bakaChiefApplication.API.Tests.Repositories
 
             await _dbContext.SaveChangesAsync();
 
-            _dbContext.NutrimentTypes.AddRange(nutriment1, nutriment2);
+            _dbContext.Nutriments.AddRange(nutriment1, nutriment2);
 
             var ingredient1 = new Ingredient
             {
                 Id = "test1",
                 Name = "Ingredient1",
                 ImageUrl = "ImageURL1",
-                NutrimentTypes = new List<NutrimentType>()
+                Nutriments = new List<Nutriment>()
                 {
                     nutriment1,
                     nutriment2
@@ -140,9 +140,9 @@ namespace bakaChiefApplication.API.Tests.Repositories
             Assert.Contains(result, i => i.Name == "Ingredient2");
 
             var ingredient = result.Find(f => f.Id == "test1");
-            Assert.NotEmpty(ingredient.NutrimentTypes);
-            Assert.Contains(ingredient.NutrimentTypes, i => i.Name == "Testnutri1");
-            Assert.Contains(ingredient.NutrimentTypes, i => i.Name == "Testnutri2");
+            Assert.NotEmpty(ingredient.Nutriments);
+            Assert.Contains(ingredient.Nutriments, i => i.Name == "Testnutri1");
+            Assert.Contains(ingredient.Nutriments, i => i.Name == "Testnutri2");
         }
 
         [Fact]

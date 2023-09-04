@@ -2,7 +2,7 @@
 
 namespace bakaChiefApplication.API.DatabaseModels
 {
-    public class NutrimentType
+    public class Nutriment
     {
         [Key]
         public string Id { get; set; } = Guid.NewGuid().ToString();
