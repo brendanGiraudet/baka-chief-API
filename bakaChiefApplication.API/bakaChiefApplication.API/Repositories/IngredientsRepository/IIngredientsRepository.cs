@@ -1,12 +1,12 @@
 ﻿using bakaChiefApplication.API.DatabaseModels;
 
-namespace bakaChiefApplication.API.Services.IngredientService
+namespace bakaChiefApplication.API.Repositories.IngredientsRepository
 {
-    public interface IIngredientService
+    public interface IIngredientsRepository
     {
         Task CreateIngredientAsync(Ingredient ingredient);
         Task DeleteIngredientAsync(string id);
-        Task<List<Ingredient>> GetAllIngredientsAsync();
+        Task<List<Ingredient>> GetIngredientsAsync();
         Task<Ingredient> GetIngredientByIdAsync(string id);
         Task UpdateIngredientAsync(Ingredient ingredient);
     }

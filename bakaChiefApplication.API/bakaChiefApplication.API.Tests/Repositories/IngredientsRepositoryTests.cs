@@ -1,17 +1,17 @@
 ﻿using bakaChiefApplication.API.DatabaseModels;
 using bakaChiefApplication.API.Repositories;
-using bakaChiefApplication.API.Repositories.IngredientRepository;
+using bakaChiefApplication.API.Repositories.IngredientsRepository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace bakaChiefApplication.API.Tests.Repositories
 {
-    public class IngredientRepositoryTests
+    public class IngredientsRepositoryTests
     {
         private DbContextOptions<DatabaseContext> _options;
         private DatabaseContext _dbContext;
 
-        public IngredientRepositoryTests()
+        public IngredientsRepositoryTests()
         {
             _options = new DbContextOptionsBuilder<DatabaseContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -26,10 +26,10 @@ namespace bakaChiefApplication.API.Tests.Repositories
             _dbContext.Database.EnsureCreated();
         }
 
-        private IIngredientRepository GetRepository()
+        private IIngredientsRepository GetRepository()
         {
             InitializeDbContext();
-            return new IngredientRepository(_dbContext);
+            return new IngredientsRepository(_dbContext);
         }
 
         [Fact]
@@ -132,7 +132,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await repository.GetAllIngredientsAsync();
+            var result = await repository.GetIngredientsAsync();
 
             // Assert
             Assert.Equal(2, result.Count);

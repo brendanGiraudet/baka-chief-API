@@ -1,16 +1,16 @@
 ﻿using bakaChiefApplication.API.DatabaseModels;
-using bakaChiefApplication.API.Services.IngredientService;
+using bakaChiefApplication.API.Services.IngredientsService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace bakaChiefApplication.API.Controllers
 {
     [Route("api/ingredients")]
     [ApiController]
-    public class IngredientController : ControllerBase
+    public class IngredientsController : ControllerBase
     {
-        private readonly IIngredientService _ingredientService;
+        private readonly IIngredientsService _ingredientService;
 
-        public IngredientController(IIngredientService ingredientService)
+        public IngredientsController(IIngredientsService ingredientService)
         {
             _ingredientService = ingredientService;
         }
@@ -37,7 +37,7 @@ namespace bakaChiefApplication.API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Ingredient>>> GetAllIngredients()
         {
-            var ingredients = await _ingredientService.GetAllIngredientsAsync();
+            var ingredients = await _ingredientService.GetIngredientsAsync();
 
             if (ingredients.Count == 0) return NoContent();
 

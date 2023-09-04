@@ -1,15 +1,15 @@
 ﻿using bakaChiefApplication.API.DatabaseModels;
-using bakaChiefApplication.API.Repositories.IngredientRepository;
+using bakaChiefApplication.API.Repositories.IngredientsRepository;
 using bakaChiefApplication.API.Services.NutrimentsService;
 
-namespace bakaChiefApplication.API.Services.IngredientService
+namespace bakaChiefApplication.API.Services.IngredientsService
 {
-    public class IngredientService : IIngredientService
+    public class IngredientsService : IIngredientsService
     {
-        private readonly IIngredientRepository _ingredientRepository;
+        private readonly IIngredientsRepository _ingredientRepository;
         private readonly INutrimentsService _nutrimentTypeService;
 
-        public IngredientService(IIngredientRepository ingredientRepository, INutrimentsService nutrimentTypeService)
+        public IngredientsService(IIngredientsRepository ingredientRepository, INutrimentsService nutrimentTypeService)
         {
             _ingredientRepository = ingredientRepository;
             _nutrimentTypeService = nutrimentTypeService;
@@ -45,9 +45,9 @@ namespace bakaChiefApplication.API.Services.IngredientService
             return await _ingredientRepository.GetIngredientByIdAsync(id);
         }
 
-        public async Task<List<Ingredient>> GetAllIngredientsAsync()
+        public async Task<List<Ingredient>> GetIngredientsAsync()
         {
-            return await _ingredientRepository.GetAllIngredientsAsync();
+            return await _ingredientRepository.GetIngredientsAsync();
         }
 
         public async Task UpdateIngredientAsync(Ingredient ingredient)

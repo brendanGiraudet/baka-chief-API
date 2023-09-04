@@ -1,15 +1,15 @@
 ﻿using bakaChiefApplication.API.DatabaseModels;
 using bakaChiefApplication.API.Repositories.RecipRepository;
-using bakaChiefApplication.API.Services.IngredientService;
+using bakaChiefApplication.API.Services.IngredientsService;
 
 namespace bakaChiefApplication.API.Services.RecipService
 {
     public class RecipService : IRecipService
     {
         private readonly IRecipRepository _recipRepository;
-        private readonly IIngredientService _ingredientService;
+        private readonly IIngredientsService _ingredientService;
 
-        public RecipService(IRecipRepository recipRepository, IIngredientService ingredientService)
+        public RecipService(IRecipRepository recipRepository, IIngredientsService ingredientService)
         {
             _recipRepository = recipRepository ?? throw new ArgumentNullException(nameof(recipRepository));
             _ingredientService = ingredientService;

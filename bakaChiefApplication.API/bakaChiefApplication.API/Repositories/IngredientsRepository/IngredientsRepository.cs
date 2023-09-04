@@ -1,13 +1,13 @@
 ﻿using bakaChiefApplication.API.DatabaseModels;
 using Microsoft.EntityFrameworkCore;
 
-namespace bakaChiefApplication.API.Repositories.IngredientRepository
+namespace bakaChiefApplication.API.Repositories.IngredientsRepository
 {
-    public class IngredientRepository : IIngredientRepository
+    public class IngredientsRepository : IIngredientsRepository
     {
         private readonly DatabaseContext _dbContext;
 
-        public IngredientRepository(DatabaseContext dbContext)
+        public IngredientsRepository(DatabaseContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -20,7 +20,7 @@ namespace bakaChiefApplication.API.Repositories.IngredientRepository
 
         public async Task<Ingredient> GetIngredientByIdAsync(string id)=> await _dbContext.Ingredients.Include(t => t.Nutriments).FirstOrDefaultAsync(i => i.Id == id);
 
-        public async Task<List<Ingredient>> GetAllIngredientsAsync() => _dbContext.Ingredients.Include(t => t.Nutriments).ToList();
+        public async Task<List<Ingredient>> GetIngredientsAsync() => _dbContext.Ingredients.Include(t => t.Nutriments).ToList();
 
         public async Task UpdateIngredientAsync(Ingredient ingredient)
         {
