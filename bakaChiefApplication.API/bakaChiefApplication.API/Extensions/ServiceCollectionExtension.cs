@@ -2,10 +2,10 @@
 using bakaChiefApplication.API.Repositories;
 using bakaChiefApplication.API.Repositories.IngredientsRepository;
 using bakaChiefApplication.API.Repositories.NutrimentsRepository;
-using bakaChiefApplication.API.Repositories.RecipRepository;
+using bakaChiefApplication.API.Repositories.RecipsRepository;
 using bakaChiefApplication.API.Services.IngredientsService;
 using bakaChiefApplication.API.Services.NutrimentsService;
-using bakaChiefApplication.API.Services.RecipService;
+using bakaChiefApplication.API.Services.RecipsService;
 using Microsoft.EntityFrameworkCore;
 
 namespace bakaChiefApplication.Extensions
@@ -17,14 +17,14 @@ namespace bakaChiefApplication.Extensions
         {
             services.AddTransient<INutrimentsRepository, NutrimentsRepository>();
             services.AddTransient<IIngredientsRepository, IngredientsRepository>();
-            services.AddTransient<IRecipRepository, RecipRepository>();
+            services.AddTransient<IRecipsRepository, RecipsRepository>();
         }
 
         public static void AddServices(this IServiceCollection services)
         {
             services.AddTransient<INutrimentsService, NutrimentsService>();
             services.AddTransient<IIngredientsService, IngredientsService>();
-            services.AddTransient<IRecipService, RecipService>();
+            services.AddTransient<IRecipsService, RecipsService>();
         }
 
         public static void AddDbContext(this IServiceCollection services, IConfiguration configuration)

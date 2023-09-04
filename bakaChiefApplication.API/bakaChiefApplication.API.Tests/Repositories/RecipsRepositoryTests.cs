@@ -1,25 +1,25 @@
 ﻿using bakaChiefApplication.API.DatabaseModels;
 using bakaChiefApplication.API.Repositories;
-using bakaChiefApplication.API.Repositories.RecipRepository;
+using bakaChiefApplication.API.Repositories.RecipsRepository;
 using Microsoft.EntityFrameworkCore;
 
 namespace bakaChiefApplication.API.Tests.Repositories
 {
-    public class RecipRepositoryTests
+    public class RecipsRepositoryTests
     {
         private DbContextOptions<DatabaseContext> _options;
 
-        public RecipRepositoryTests()
+        public RecipsRepositoryTests()
         {
             _options = new DbContextOptionsBuilder<DatabaseContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
                 .Options;
         }
 
-        private IRecipRepository GetRepository()
+        private IRecipsRepository GetRepository()
         {
             InitializeDbContext(); // Reset the database
-            return new RecipRepository(new DatabaseContext(_options));
+            return new RecipsRepository(new DatabaseContext(_options));
         }
 
         private void InitializeDbContext()
@@ -41,7 +41,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
             await repository.AddRecipAsync(recip2);
 
             // Act
-            var result = await repository.GetAllRecipsAsync();
+            var result = await repository.GetRecipsAsync();
 
             // Assert
             Assert.Equal(2, result.Count());

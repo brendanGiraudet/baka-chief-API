@@ -35,7 +35,7 @@ namespace bakaChiefApplication.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Ingredient>>> GetAllIngredients()
+        public async Task<ActionResult<List<Ingredient>>> GetIngredients()
         {
             var ingredients = await _ingredientService.GetIngredientsAsync();
 

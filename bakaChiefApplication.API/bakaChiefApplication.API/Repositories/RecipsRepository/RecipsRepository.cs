@@ -1,18 +1,18 @@
 ﻿using bakaChiefApplication.API.DatabaseModels;
 using Microsoft.EntityFrameworkCore;
 
-namespace bakaChiefApplication.API.Repositories.RecipRepository
+namespace bakaChiefApplication.API.Repositories.RecipsRepository
 {
-    public class RecipRepository : IRecipRepository
+    public class RecipsRepository : IRecipsRepository
     {
         private readonly DatabaseContext _dbContext;
 
-        public RecipRepository(DatabaseContext dbContext)
+        public RecipsRepository(DatabaseContext dbContext)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
-        public async Task<IEnumerable<Recip>> GetAllRecipsAsync()
+        public async Task<IEnumerable<Recip>> GetRecipsAsync()
         {
             return await Task.FromResult(_dbContext.Recips
                 .Include(r => r.RecipIngredients)

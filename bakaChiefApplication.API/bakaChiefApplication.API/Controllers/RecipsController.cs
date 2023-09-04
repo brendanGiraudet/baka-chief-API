@@ -1,24 +1,24 @@
 ﻿using bakaChiefApplication.API.DatabaseModels;
-using bakaChiefApplication.API.Services.RecipService;
+using bakaChiefApplication.API.Services.RecipsService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace bakaChiefApplication.API.Controllers
 {
     [Route("api/recips")]
     [ApiController]
-    public class RecipController : ControllerBase
+    public class RecipsController : ControllerBase
     {
-        private readonly IRecipService _recipService;
+        private readonly IRecipsService _recipService;
 
-        public RecipController(IRecipService recipService)
+        public RecipsController(IRecipsService recipService)
         {
             _recipService = recipService ?? throw new ArgumentNullException(nameof(recipService));
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllRecips()
+        public async Task<IActionResult> GetRecips()
         {
-            var recips = await _recipService.GetAllRecipsAsync();
+            var recips = await _recipService.GetRecipsAsync();
             return Ok(recips);
         }
 

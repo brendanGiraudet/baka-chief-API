@@ -1,23 +1,23 @@
 ﻿using bakaChiefApplication.API.DatabaseModels;
-using bakaChiefApplication.API.Repositories.RecipRepository;
+using bakaChiefApplication.API.Repositories.RecipsRepository;
 using bakaChiefApplication.API.Services.IngredientsService;
 
-namespace bakaChiefApplication.API.Services.RecipService
+namespace bakaChiefApplication.API.Services.RecipsService
 {
-    public class RecipService : IRecipService
+    public class RecipsService : IRecipsService
     {
-        private readonly IRecipRepository _recipRepository;
+        private readonly IRecipsRepository _recipRepository;
         private readonly IIngredientsService _ingredientService;
 
-        public RecipService(IRecipRepository recipRepository, IIngredientsService ingredientService)
+        public RecipsService(IRecipsRepository recipRepository, IIngredientsService ingredientService)
         {
             _recipRepository = recipRepository ?? throw new ArgumentNullException(nameof(recipRepository));
             _ingredientService = ingredientService;
         }
 
-        public async Task<IEnumerable<Recip>> GetAllRecipsAsync()
+        public async Task<IEnumerable<Recip>> GetRecipsAsync()
         {
-            return await _recipRepository.GetAllRecipsAsync();
+            return await _recipRepository.GetRecipsAsync();
         }
 
         public async Task<Recip> GetRecipByIdAsync(string id)

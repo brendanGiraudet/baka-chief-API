@@ -1,12 +1,12 @@
 ﻿using bakaChiefApplication.API.DatabaseModels;
 
-namespace bakaChiefApplication.API.Services.RecipService
+namespace bakaChiefApplication.API.Repositories.RecipsRepository
 {
-    public interface IRecipService
+    public interface IRecipsRepository
     {
-        Task<IEnumerable<Recip>> GetAllRecipsAsync();
+        Task<IEnumerable<Recip>> GetRecipsAsync();
         Task<Recip> GetRecipByIdAsync(string id);
-        Task CreateRecipAsync(Recip recip);
+        Task AddRecipAsync(Recip recip);
         Task UpdateRecipAsync(Recip recip);
         Task DeleteRecipAsync(string id);
     }
