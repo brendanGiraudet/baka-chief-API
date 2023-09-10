@@ -31,7 +31,7 @@ namespace bakaChiefApplication.API.Repositories.RecipsRepository
                 .FirstOrDefaultAsync(r => r.Id == id);
         }
 
-        public async Task AddRecipAsync(Recip recip)
+        public async Task CreateRecipAsync(Recip recip)
         {
             await _dbContext.Recips.AddAsync(recip);
             await _dbContext.SaveChangesAsync();
@@ -39,8 +39,22 @@ namespace bakaChiefApplication.API.Repositories.RecipsRepository
 
         public async Task UpdateRecipAsync(Recip recip)
         {
-            _dbContext.Recips.Update(recip);
-            await _dbContext.SaveChangesAsync();
+            using (var dbContextTransaction = _dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    await DeleteRecipAsync(recip.Id);
+
+                    await CreateRecipAsync(recip);
+
+                    await dbContextTransaction.CommitAsync();
+
+                }
+                catch (Exception ex)
+                {
+                    await dbContextTransaction.RollbackAsync();
+                }
+            }
         }
 
         public async Task DeleteRecipAsync(string id)

@@ -37,8 +37,8 @@ namespace bakaChiefApplication.API.Tests.Repositories
             // Arrange
             var recip1 = new Recip { Name = "Recip 1" };
             var recip2 = new Recip { Name = "Recip 2" };
-            await repository.AddRecipAsync(recip1);
-            await repository.AddRecipAsync(recip2);
+            await repository.CreateRecipAsync(recip1);
+            await repository.CreateRecipAsync(recip2);
 
             // Act
             var result = await repository.GetRecipsAsync();
@@ -56,7 +56,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
 
             // Arrange
             var recip = new Recip { Name = "Test Recip" };
-            repository.AddRecipAsync(recip);
+            repository.CreateRecipAsync(recip);
 
             // Act
             var result = await repository.GetRecipByIdAsync(recip.Id);
@@ -73,7 +73,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
 
             // Arrange
             var recip = new Recip { Name = "Old Name" };
-            await repository.AddRecipAsync(recip);
+            await repository.CreateRecipAsync(recip);
 
             // Act
             recip.Name = "New Name";
@@ -91,7 +91,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
 
             // Arrange
             var recip = new Recip { Name = "Recip to Delete" };
-            await repository.AddRecipAsync(recip);
+            await repository.CreateRecipAsync(recip);
 
             // Act
             await repository.DeleteRecipAsync(recip.Id);

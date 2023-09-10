@@ -16,11 +16,11 @@ namespace bakaChiefApplication.API.Repositories
 
             modelBuilder.Entity<Nutriment>().HasMany(n => n.Ingredients).WithMany(i => i.Nutriments);
             
-            modelBuilder.Entity<Ingredient>().HasMany(i => i.RecipIngredients).WithOne(j => j.Ingredient);
+            modelBuilder.Entity<Ingredient>().HasMany(i => i.RecipIngredients).WithOne(j => j.Ingredient).OnDelete(DeleteBehavior.Cascade);
             
-            modelBuilder.Entity<Recip>().HasMany(i => i.RecipIngredients).WithOne(j => j.Recip);
+            modelBuilder.Entity<Recip>().HasMany(i => i.RecipIngredients).WithOne(j => j.Recip).OnDelete(DeleteBehavior.Cascade);
             
-            modelBuilder.Entity<Recip>().HasMany(i => i.RecipSteps).WithOne(j => j.Recip);
+            modelBuilder.Entity<Recip>().HasMany(i => i.RecipSteps).WithOne(j => j.Recip).OnDelete(DeleteBehavior.Cascade);
         }
 
 

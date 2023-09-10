@@ -28,7 +28,7 @@ namespace bakaChiefApplication.API.Services.RecipsService
         public async Task CreateRecipAsync(Recip recip)
         {
             recip.RecipIngredients = await GetExistingRecipIngredient(recip.RecipIngredients);
-            await _recipRepository.AddRecipAsync(recip);
+            await _recipRepository.CreateRecipAsync(recip);
         }
 
         private async Task<List<RecipIngredient>> GetExistingRecipIngredient(ICollection<RecipIngredient> recipIngredients)
@@ -50,6 +50,8 @@ namespace bakaChiefApplication.API.Services.RecipsService
 
         public async Task UpdateRecipAsync(Recip recip)
         {
+            recip.RecipIngredients = await GetExistingRecipIngredient(recip.RecipIngredients);
+
             await _recipRepository.UpdateRecipAsync(recip);
         }
 

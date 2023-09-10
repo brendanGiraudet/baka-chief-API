@@ -6,7 +6,7 @@ namespace bakaChiefApplication.API.Repositories.RecipsRepository
     {
         Task<IEnumerable<Recip>> GetRecipsAsync();
         Task<Recip> GetRecipByIdAsync(string id);
-        Task AddRecipAsync(Recip recip);
+        Task CreateRecipAsync(Recip recip);
         Task UpdateRecipAsync(Recip recip);
         Task DeleteRecipAsync(string id);
     }
