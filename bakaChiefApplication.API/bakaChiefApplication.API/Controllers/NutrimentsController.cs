@@ -24,7 +24,7 @@ namespace bakaChiefApplication.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Nutriment>> GetNutrimentByIdAsync(string id)
+        public async Task<IActionResult> GetNutrimentByIdAsync(string id)
         {
             var nutriment = await _nutrimentsService.GetNutrimentByIdAsync(id);
             if (nutriment == null)
@@ -36,11 +36,15 @@ namespace bakaChiefApplication.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Nutriment>>> GetNutrimentsAsync()
+        public async Task<IActionResult> GetNutrimentsAsync()
         {
             var nutriments = await _nutrimentsService.GetNutrimentsAsync();
 
-            return Ok(nutriments);
+             var statusCode = StatusCodes.Status200OK;
+            
+            if (nutriments.Count() == 0) statusCode = StatusCodes.Status204NoContent;
+
+            return StatusCode(statusCode, nutriments);
         }
 
         [HttpPut("{id}")]

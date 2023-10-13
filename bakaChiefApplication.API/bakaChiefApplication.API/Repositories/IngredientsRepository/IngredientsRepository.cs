@@ -20,7 +20,7 @@ namespace bakaChiefApplication.API.Repositories.IngredientsRepository
 
         public async Task<Ingredient> GetIngredientByIdAsync(string id)=> await _dbContext.Ingredients.Include(t => t.Nutriments).FirstOrDefaultAsync(i => i.Id == id);
 
-        public async Task<List<Ingredient>> GetIngredientsAsync() => _dbContext.Ingredients.Include(t => t.Nutriments).ToList();
+        public async Task<IEnumerable<Ingredient>> GetIngredientsAsync() => _dbContext.Ingredients.Include(t => t.Nutriments);
 
         public async Task UpdateIngredientAsync(Ingredient ingredient)
         {

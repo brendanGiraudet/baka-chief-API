@@ -22,7 +22,7 @@ namespace bakaChiefApplication.API.Services.NutrimentsService
             return await _nutrimentsRepository.GetNutrimentByIdAsync(id);
         }
 
-        public async Task<List<Nutriment>> GetNutrimentsAsync()
+        public async Task<IEnumerable<Nutriment>> GetNutrimentsAsync()
         {
             return await _nutrimentsRepository.GetNutrimentsAsync();
         }

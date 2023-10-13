@@ -135,11 +135,11 @@ namespace bakaChiefApplication.API.Tests.Repositories
             var result = await repository.GetIngredientsAsync();
 
             // Assert
-            Assert.Equal(2, result.Count);
+            Assert.Equal(2, result.Count());
             Assert.Contains(result, i => i.Name == "Ingredient1");
             Assert.Contains(result, i => i.Name == "Ingredient2");
 
-            var ingredient = result.Find(f => f.Id == "test1");
+            var ingredient = result.FirstOrDefault(f => f.Id == "test1");
             Assert.NotEmpty(ingredient.Nutriments);
             Assert.Contains(ingredient.Nutriments, i => i.Name == "Testnutri1");
             Assert.Contains(ingredient.Nutriments, i => i.Name == "Testnutri2");

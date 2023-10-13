@@ -89,7 +89,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
             var result = await repository.GetNutrimentsAsync();
 
             // Assert
-            Assert.Equal(2, result.Count);
+            Assert.Equal(2, result.Count());
             Assert.Contains(result, n => n.Name == "Fiber");
             Assert.Contains(result, n => n.Name == "Calcium");
         }

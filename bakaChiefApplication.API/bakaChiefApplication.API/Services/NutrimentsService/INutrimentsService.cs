@@ -6,7 +6,7 @@ namespace bakaChiefApplication.API.Services.NutrimentsService
     {
         Task CreateNutrimentAsync(Nutriment nutriment);
         Task<Nutriment> GetNutrimentByIdAsync(string id);
-        Task<List<Nutriment>> GetNutrimentsAsync();
+        Task<IEnumerable<Nutriment>> GetNutrimentsAsync();
         Task UpdateNutrimentAsync(Nutriment nutriment);
         Task DeleteNutrimentAsync(string id);
     }

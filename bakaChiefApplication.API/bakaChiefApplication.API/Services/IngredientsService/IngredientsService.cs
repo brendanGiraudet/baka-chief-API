@@ -17,14 +17,14 @@ namespace bakaChiefApplication.API.Services.IngredientsService
 
         public async Task CreateIngredientAsync(Ingredient ingredient)
         {
-            List<Nutriment> nutriments = await GetExistingNutriments(ingredient.Nutriments);
+            var nutriments = await GetExistingNutriments(ingredient.Nutriments);
 
-            ingredient.Nutriments = nutriments;
+            ingredient.Nutriments = nutriments.ToList();
 
             await _ingredientRepository.CreateIngredientAsync(ingredient);
         }
 
-        private async Task<List<Nutriment>> GetExistingNutriments(ICollection<Nutriment> nutrimentTypes)
+        private async Task<IEnumerable<Nutriment>> GetExistingNutriments(ICollection<Nutriment> nutrimentTypes)
         {
             var existingNutrimentTypes = new List<Nutriment>();
             foreach (var nutrimentType in nutrimentTypes)
@@ -45,16 +45,16 @@ namespace bakaChiefApplication.API.Services.IngredientsService
             return await _ingredientRepository.GetIngredientByIdAsync(id);
         }
 
-        public async Task<List<Ingredient>> GetIngredientsAsync()
+        public async Task<IEnumerable<Ingredient>> GetIngredientsAsync()
         {
             return await _ingredientRepository.GetIngredientsAsync();
         }
 
         public async Task UpdateIngredientAsync(Ingredient ingredient)
         {
-            List<Nutriment> nutriments = await GetExistingNutriments(ingredient.Nutriments);
+            var nutriments = await GetExistingNutriments(ingredient.Nutriments);
 
-            ingredient.Nutriments = nutriments;
+            ingredient.Nutriments = nutriments.ToList();
 
             await _ingredientRepository.UpdateIngredientAsync(ingredient);
         }

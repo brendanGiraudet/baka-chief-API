@@ -24,24 +24,28 @@ namespace bakaChiefApplication.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Ingredient>> GetIngredientById(string id)
+        public async Task<IActionResult> GetIngredientById(string id)
         {
             var ingredient = await _ingredientService.GetIngredientByIdAsync(id);
+            
             if (ingredient == null)
             {
                 return NotFound();
             }
+
             return Ok(ingredient);
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Ingredient>>> GetIngredients()
+        public async Task<IActionResult> GetIngredients()
         {
             var ingredients = await _ingredientService.GetIngredientsAsync();
 
-            if (ingredients.Count == 0) return NoContent();
+            var statusCode = StatusCodes.Status200OK;
+            
+            if (ingredients.Count() == 0) statusCode = StatusCodes.Status204NoContent;
 
-            return Ok(ingredients);
+            return StatusCode(statusCode, ingredients);
         }
 
         [HttpPut("{id}")]
@@ -60,6 +64,7 @@ namespace bakaChiefApplication.API.Controllers
         public async Task<IActionResult> DeleteIngredient(string id)
         {
             await _ingredientService.DeleteIngredientAsync(id);
+            
             return Ok();
         }
     }

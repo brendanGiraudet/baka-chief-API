@@ -24,9 +24,9 @@ namespace bakaChiefApplication.API.Repositories.NutrimentsRepository
             return await _dbContext.Nutriments.FindAsync(id);
         }
 
-        public async Task<List<Nutriment>> GetNutrimentsAsync()
+        public async Task<IEnumerable<Nutriment>> GetNutrimentsAsync()
         {
-            return await _dbContext.Nutriments.ToListAsync();
+            return _dbContext.Nutriments;
         }
 
         public async Task UpdateNutrimentAsync(Nutriment nutriment)

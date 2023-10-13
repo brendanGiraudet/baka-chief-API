@@ -2,31 +2,36 @@
 using bakaChiefApplication.API.Repositories;
 using bakaChiefApplication.API.Repositories.RecipsRepository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace bakaChiefApplication.API.Tests.Repositories
 {
     public class RecipsRepositoryTests
     {
         private DbContextOptions<DatabaseContext> _options;
+        private DatabaseContext _databaseContext;
 
         public RecipsRepositoryTests()
         {
             _options = new DbContextOptionsBuilder<DatabaseContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
                 .Options;
+
+            _databaseContext = new DatabaseContext(_options);
         }
 
         private IRecipsRepository GetRepository()
         {
             InitializeDbContext(); // Reset the database
+
             return new RecipsRepository(new DatabaseContext(_options));
         }
 
         private void InitializeDbContext()
         {
-            using var dbContext = new DatabaseContext(_options);
-            dbContext.Database.EnsureDeleted();
-            dbContext.Database.EnsureCreated();
+            _databaseContext.Database.EnsureDeleted();
+            _databaseContext.Database.EnsureCreated();
         }
 
         [Fact]
@@ -37,8 +42,9 @@ namespace bakaChiefApplication.API.Tests.Repositories
             // Arrange
             var recip1 = new Recip { Name = "Recip 1" };
             var recip2 = new Recip { Name = "Recip 2" };
-            await repository.CreateRecipAsync(recip1);
-            await repository.CreateRecipAsync(recip2);
+            _databaseContext.Recips.Add(recip1);
+            _databaseContext.Recips.Add(recip2);
+            await _databaseContext.SaveChangesAsync();
 
             // Act
             var result = await repository.GetRecipsAsync();
