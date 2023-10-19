@@ -20,11 +20,7 @@ namespace bakaChiefApplication.API.Controllers
         {
             var recips = await _recipService.GetRecipsAsync();
 
-            var statusCode = StatusCodes.Status200OK;
-
-            if (recips.Count() == 0) statusCode = StatusCodes.Status204NoContent;
-
-            return StatusCode(statusCode, recips);
+           return StatusCode(StatusCodes.Status200OK, recips);
         }
 
         [HttpGet("{id}")]

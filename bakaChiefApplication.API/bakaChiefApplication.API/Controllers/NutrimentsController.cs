@@ -40,11 +40,7 @@ namespace bakaChiefApplication.API.Controllers
         {
             var nutriments = await _nutrimentsService.GetNutrimentsAsync();
 
-             var statusCode = StatusCodes.Status200OK;
-            
-            if (nutriments.Count() == 0) statusCode = StatusCodes.Status204NoContent;
-
-            return StatusCode(statusCode, nutriments);
+            return StatusCode(StatusCodes.Status200OK, nutriments);
         }
 
         [HttpPut("{id}")]

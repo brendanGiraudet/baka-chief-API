@@ -41,11 +41,7 @@ namespace bakaChiefApplication.API.Controllers
         {
             var ingredients = await _ingredientService.GetIngredientsAsync();
 
-            var statusCode = StatusCodes.Status200OK;
-            
-            if (ingredients.Count() == 0) statusCode = StatusCodes.Status204NoContent;
-
-            return StatusCode(statusCode, ingredients);
+            return StatusCode(StatusCodes.Status200OK, ingredients);
         }
 
         [HttpPut("{id}")]
