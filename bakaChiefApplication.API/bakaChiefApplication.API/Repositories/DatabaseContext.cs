@@ -48,5 +48,15 @@ namespace bakaChiefApplication.API.Repositories
         /// Gets or sets the <see cref="DbSet{RecipStep}"/>.
         /// </summary>
         public virtual DbSet<RecipStep> RecipSteps { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the <see cref="DbSet{ProductInfo}"/>.
+        /// </summary>
+        public virtual DbSet<ProductInfo> Products { get; set; }
+
+        // /// <summary>
+        // /// Gets or sets the <see cref="DbSet{RecipProducts}"/>.
+        // /// </summary>
+        // public virtual DbSet<RecipProducts> RecipProducts { get; set; }
     }
 }
