@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-applicationName: baka-chief-api
+applicationName: baka-chief
 
 replicaCount: 1
 
@@ -35,11 +35,16 @@ securityContext: {}
 volumeMounts:
   - mountPath: /https/
     name: certificate
+  - mountPath: /app/database/
+    name: db
 
 volumes:
   - name: certificate
     persistentVolumeClaim:
       claimName: certificate-claim
+- name: db
+    persistentVolumeClaim:
+      claimName: db-claim
 
 service:
   type: NodePort
@@ -104,4 +109,4 @@ environmentVar:
     value: "true"
 
   - name: ConnectionStrings__Database
-    value: "Data Source=./Repositories/database.db"
+    value: "Data Source=/app/database/database.db"

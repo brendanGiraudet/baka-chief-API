@@ -1,9 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using CsvHelper.Configuration.Attributes;
 
 namespace bakaChiefApplication.API.DatabaseModels;
 
-[Delimiter(";")]
 public class ProductInfo
 {
     [Key]

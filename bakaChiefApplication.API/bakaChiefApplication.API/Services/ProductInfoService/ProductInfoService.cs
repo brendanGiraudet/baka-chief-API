@@ -1,4 +1,5 @@
 ﻿using bakaChiefApplication.API.DatabaseModels;
+using bakaChiefApplication.API.EqualityComparer;
 using bakaChiefApplication.API.Repositories.ProductInfoRepository;
 
 namespace bakaChiefApplication.API.Services.ProductInfoService
@@ -19,6 +20,8 @@ namespace bakaChiefApplication.API.Services.ProductInfoService
         
         public async Task CreateProductInfosAsync(IEnumerable<ProductInfo> productInfos)
         {
+            productInfos = productInfos.Distinct(new ProductInfoEqualityComparer());
+            
             await _productInfoRepository.CreateProductInfosAsync(productInfos);
         }
 

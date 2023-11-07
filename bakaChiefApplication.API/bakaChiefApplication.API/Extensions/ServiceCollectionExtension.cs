@@ -36,7 +36,7 @@ namespace bakaChiefApplication.Extensions
             services.AddDbContext<DatabaseContext>(options =>
                 options.UseSqlite(connectionString));
         }
-        
+
         public static void AddConfigurations(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<EnableFeaturesConfiguration>(configuration.GetSection("EnableFeatures"));
