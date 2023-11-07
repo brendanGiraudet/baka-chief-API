@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       Repo: /home/runner/work/baka-chief-API/baka-chief-API/bakaChiefApplication.API/bakaChiefApplication.API/
-      DockerImageName: bakayarusama/baka-chief:${{  github.ref_name }}
+      DockerImageName: bakayarusama/baka-chief-api:${{  github.ref_name }}
 
     steps:
     - name: Checkout source code
