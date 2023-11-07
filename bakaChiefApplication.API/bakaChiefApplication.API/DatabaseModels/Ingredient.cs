@@ -11,11 +11,11 @@ namespace bakaChiefApplication.API.DatabaseModels
         
         public string? ImageUrl { get; set; }
         
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         
-        public DateTime UpdatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
         
-        public DateTime DeletedDate { get; set; }
+        public DateTime? DeletedDate { get; set; }
 
         public ICollection<Nutriment> Nutriments { get; set; } = new HashSet<Nutriment>();
         

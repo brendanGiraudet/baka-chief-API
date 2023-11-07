@@ -40,19 +40,20 @@ namespace bakaChiefApplication.API.Tests.Repositories
             var repository = GetRepository();
 
             // Arrange
-            var recip1 = new Recip { Name = "Recip 1" };
-            var recip2 = new Recip { Name = "Recip 2" };
+            var nutriment = new Nutriment{ Name = "nutriment"};
+            var ingredient = new Ingredient{ Name = "ingredient", Nutriments = new HashSet<Nutriment>() { nutriment } };
+            var recipStep = new RecipStep{ Number = 1 , Description = "desc "};
+            var recipIngredient = new RecipIngredient{ Ingredient = ingredient, Quantity = 1, MeasureUnit = "gr" };
+            var recip1 = new Recip { Name = "Recip 1", RecipIngredients = new List<RecipIngredient>(){ recipIngredient }, RecipSteps = new List<RecipStep>{recipStep} };
             _databaseContext.Recips.Add(recip1);
-            _databaseContext.Recips.Add(recip2);
             await _databaseContext.SaveChangesAsync();
 
             // Act
             var result = await repository.GetRecipsAsync();
 
             // Assert
-            Assert.Equal(2, result.Count());
+            Assert.Equal(1, result.Count());
             Assert.Contains(result, r => r.Name == "Recip 1");
-            Assert.Contains(result, r => r.Name == "Recip 2");
         }
 
         [Fact]
