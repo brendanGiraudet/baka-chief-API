@@ -21,11 +21,9 @@ jobs:
       run: dotnet restore
     
     - name: Build
-      working-directory: /home/runner/work/baka-chief-API/baka-chief-API/bakaChiefApplication.API
       run: dotnet build --configuration Release --no-restore
     
     - name: Test
-      working-directory: /home/runner/work/baka-chief-API/baka-chief-API/bakaChiefApplication.API
       run: dotnet test --no-restore --verbosity normal
 
   Continuous_delivery:
@@ -37,7 +35,7 @@ jobs:
 
     steps:
     - name: Checkout source code
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
 
     - name: Login to Docker Hub
       run: docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} 
