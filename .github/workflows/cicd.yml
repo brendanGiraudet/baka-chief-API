@@ -21,9 +21,11 @@ jobs:
       run: dotnet restore
     
     - name: Build
+      working-directory: /home/runner/work/baka-chief-API/baka-chief-API/bakaChiefApplication.API
       run: dotnet build --configuration Release --no-restore
     
     - name: Test
+      working-directory: /home/runner/work/baka-chief-API/baka-chief-API/bakaChiefApplication.API
       run: dotnet test --no-restore --verbosity normal
 
   Continuous_delivery:
