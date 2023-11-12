@@ -26,7 +26,7 @@ namespace bakaChiefApplication.API.Services.ProductInfoService
             await _productInfoRepository.CreateProductInfosAsync(productInfos);
         }
 
-        public async Task<ProductInfo> GetProductInfoByIdAsync(string id)
+        public async Task<ProductInfo?> GetProductInfoByIdAsync(string id)
         {
             return await _productInfoRepository.GetProductInfoByIdAsync(id);
         }

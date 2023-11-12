@@ -8,6 +8,7 @@ using bakaChiefApplication.API.Services.IngredientsService;
 using bakaChiefApplication.API.Services.NutrimentsService;
 using bakaChiefApplication.API.Services.ProductInfoService;
 using bakaChiefApplication.API.Services.RecipsService;
+using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 
 namespace bakaChiefApplication.API.Extensions;

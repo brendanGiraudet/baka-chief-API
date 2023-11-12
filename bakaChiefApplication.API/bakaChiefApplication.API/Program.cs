@@ -1,16 +1,19 @@
 using bakaChiefApplication.API.Extensions;
 using Login.Extensions;
-using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.OData;
+using Microsoft.OData.ModelBuilder;
+using bakaChiefApplication.API.DatabaseModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-});
+var modelBuilder = new ODataConventionModelBuilder();
+modelBuilder.EntitySet<ProductInfoLight>("ProductInfoLights");
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddControllers().AddOData(
+    options => options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null).AddRouteComponents(
+        "odata",
+        modelBuilder.GetEdmModel()));
+
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext(builder.Configuration);
@@ -49,8 +52,10 @@ if (enableSwagger)
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
+
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints => endpoints.MapControllers());
 
 app.Run();

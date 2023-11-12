@@ -24,14 +24,14 @@ public class ProductInfoRepository : IProductInfoRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<ProductInfo> GetProductInfoByIdAsync(string id)
+    public async Task<ProductInfo?> GetProductInfoByIdAsync(string id)
     {
         return await _dbContext.Products.FindAsync(id);
     }
 
     public async Task<IEnumerable<ProductInfo>> GetProductInfosAsync()
     {
-        return _dbContext.Products.Take(100);
+        return _dbContext.Products.Take(1000);
     }
 
     public async Task UpdateProductInfoAsync(ProductInfo ProductInfo)

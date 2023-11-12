@@ -8,7 +8,7 @@ public static class ProductInfoMapperExtension
     {
         return new ProductInfoLight
         {
-            Code = productInfo.code,
+            Id = productInfo.code,
             ImageUrl = productInfo.image_url,
             Name = productInfo.product_name,
             NutriScoreLevel = productInfo.nutriscore_grade
