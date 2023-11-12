@@ -31,7 +31,7 @@ public class ProductInfoRepository : IProductInfoRepository
 
     public async Task<IEnumerable<ProductInfo>> GetProductInfosAsync()
     {
-        return _dbContext.Products;
+        return _dbContext.Products.Take(100);
     }
 
     public async Task UpdateProductInfoAsync(ProductInfo ProductInfo)

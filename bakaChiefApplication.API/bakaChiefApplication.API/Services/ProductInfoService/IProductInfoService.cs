@@ -7,7 +7,7 @@ namespace bakaChiefApplication.API.Services.ProductInfoService
         Task CreateProductInfoAsync(ProductInfo productInfo);
         Task CreateProductInfosAsync(IEnumerable<ProductInfo> productInfos);
         Task<ProductInfo> GetProductInfoByIdAsync(string id);
-        Task<IEnumerable<ProductInfo>> GetProductInfosAsync();
+        Task<IEnumerable<ProductInfoLight>> GetProductInfosAsync();
         Task UpdateProductInfoAsync(ProductInfo productInfoType);
         Task DeleteProductInfoAsync(string id);
     }
