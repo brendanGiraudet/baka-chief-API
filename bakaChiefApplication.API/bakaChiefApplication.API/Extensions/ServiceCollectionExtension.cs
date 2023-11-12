@@ -10,36 +10,35 @@ using bakaChiefApplication.API.Services.ProductInfoService;
 using bakaChiefApplication.API.Services.RecipsService;
 using Microsoft.EntityFrameworkCore;
 
-namespace bakaChiefApplication.Extensions
+namespace bakaChiefApplication.API.Extensions;
+
+public static class ServiceCollectionExtension
 {
-    public static class ServiceCollectionExtension
+    public static void AddRepositories(this IServiceCollection services)
     {
-        public static void AddRepositories(this IServiceCollection services)
-        {
-            services.AddTransient<INutrimentsRepository, NutrimentsRepository>();
-            services.AddTransient<IIngredientsRepository, IngredientsRepository>();
-            services.AddTransient<IRecipsRepository, RecipsRepository>();
-            services.AddTransient<IProductInfoRepository, ProductInfoRepository>();
-        }
+        services.AddTransient<INutrimentsRepository, NutrimentsRepository>();
+        services.AddTransient<IIngredientsRepository, IngredientsRepository>();
+        services.AddTransient<IRecipsRepository, RecipsRepository>();
+        services.AddTransient<IProductInfoRepository, ProductInfoRepository>();
+    }
 
-        public static void AddServices(this IServiceCollection services)
-        {
-            services.AddTransient<INutrimentsService, NutrimentsService>();
-            services.AddTransient<IIngredientsService, IngredientsService>();
-            services.AddTransient<IRecipsService, RecipsService>();
-            services.AddTransient<IProductInfoService, ProductInfoService>();
-        }
+    public static void AddServices(this IServiceCollection services)
+    {
+        services.AddTransient<INutrimentsService, NutrimentsService>();
+        services.AddTransient<IIngredientsService, IngredientsService>();
+        services.AddTransient<IRecipsService, RecipsService>();
+        services.AddTransient<IProductInfoService, ProductInfoService>();
+    }
 
-        public static void AddDbContext(this IServiceCollection services, IConfiguration configuration)
-        {
-            var connectionString = configuration.GetConnectionString("Database");
-            services.AddDbContext<DatabaseContext>(options =>
-                options.UseSqlite(connectionString));
-        }
+    public static void AddDbContext(this IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("Database");
+        services.AddDbContext<DatabaseContext>(options =>
+            options.UseSqlite(connectionString));
+    }
 
-        public static void AddConfigurations(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.Configure<EnableFeaturesConfiguration>(configuration.GetSection("EnableFeatures"));
-        }
+    public static void AddConfigurations(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<EnableFeaturesConfiguration>(configuration.GetSection("EnableFeatures"));
     }
 }
