@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Values.applicationName }}
-  namespace: {{ .Values.applicationName }}
+  namespace: baka-chief
   labels:
     app: {{ .Values.applicationName }}
 spec:

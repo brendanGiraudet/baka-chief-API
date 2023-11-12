@@ -4,7 +4,7 @@ metadata:
   labels:
     io.kompose.service: db-claim
   name: db-claim
-  namespace: {{ .Values.applicationName }}
+  namespace: baka-chief
 spec:
   accessModes:
   - ReadWriteOnce

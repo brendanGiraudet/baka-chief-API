@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ .Values.applicationName }}
-  namespace: {{ .Values.applicationName }}
+  namespace: baka-chief
 
 spec:
   selector:

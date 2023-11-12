@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-applicationName: baka-chief
+applicationName: baka-chief-api
 
 replicaCount: 1
 
@@ -11,7 +11,7 @@ image:
   pullPolicy: Always
   # pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "1.0.1"
+  tag: "main"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -42,7 +42,7 @@ volumes:
   - name: certificate
     persistentVolumeClaim:
       claimName: certificate-claim
-- name: db
+  - name: db
     persistentVolumeClaim:
       claimName: db-claim
 
