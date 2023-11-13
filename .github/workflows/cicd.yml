@@ -2,7 +2,8 @@ name: baka chief api CICD
 
 on:
   push:
-    branches: [ "main" ]
+    tags: 
+      - '*'
 
 jobs:
   Continuous-integration:
