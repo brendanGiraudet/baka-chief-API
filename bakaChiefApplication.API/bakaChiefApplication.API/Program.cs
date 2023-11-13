@@ -7,7 +7,7 @@ using bakaChiefApplication.API.DatabaseModels;
 var builder = WebApplication.CreateBuilder(args);
 
 var modelBuilder = new ODataConventionModelBuilder();
-modelBuilder.EntitySet<ProductInfoLight>("ProductInfoLights");
+modelBuilder.EntitySet<ProductInfo>("ProductInfos");
 
 builder.Services.AddControllers().AddOData(
     options => options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null).AddRouteComponents(
