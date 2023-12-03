@@ -8,8 +8,8 @@ using bakaChiefApplication.API.Services.IngredientsService;
 using bakaChiefApplication.API.Services.NutrimentsService;
 using bakaChiefApplication.API.Services.ProductInfoService;
 using bakaChiefApplication.API.Services.RecipsService;
-using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace bakaChiefApplication.API.Extensions;
 
@@ -29,6 +29,8 @@ public static class ServiceCollectionExtension
         services.AddTransient<IIngredientsService, IngredientsService>();
         services.AddTransient<IRecipsService, RecipsService>();
         services.AddTransient<IProductInfoService, ProductInfoService>();
+
+        services.AddScoped<IMemoryCache, MemoryCache>();
     }
 
     public static void AddDbContext(this IServiceCollection services, IConfiguration configuration)

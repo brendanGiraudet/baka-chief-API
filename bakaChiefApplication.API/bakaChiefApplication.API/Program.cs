@@ -10,7 +10,7 @@ var modelBuilder = new ODataConventionModelBuilder();
 modelBuilder.EntitySet<ProductInfo>("ProductInfos");
 
 builder.Services.AddControllers().AddOData(
-    options => options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null).AddRouteComponents(
+    options => options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(100).AddRouteComponents(
         "odata",
         modelBuilder.GetEdmModel()));
 
