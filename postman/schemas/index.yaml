@@ -35,6 +35,58 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Error"
+    /odata/ProductInfos?$top={top}&$skip={skip}:
+        parameters:
+            - name: top
+              description: items size number
+              in: path
+              required: true
+              schema:
+                  $ref: "#/components/schemas/top"
+            - name: skip
+              description: skipped items number
+              in: path
+              required: true
+              schema:
+                  $ref: "#/components/schemas/skip"
+        get:
+            summary: Get productinfos
+            responses:
+                "200":
+                    description: Productinfo array
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Spacecraft"
+                500:
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /odata/ProductInfos('{code}'):
+        parameters:
+            - name: code
+              description: code of the searched productinfo 
+              in: path
+              required: true
+              schema:
+                  $ref: "#/components/schemas/code"
+        get:
+            summary: Get productinfo by code
+            responses:
+                "200":
+                    description: Productinfo
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Spacecraft"
+                500:
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
     /nutrimentType:
         get:
             summary: get nutriment type list
@@ -54,6 +106,15 @@ paths:
 
 components:
     schemas:
+        code:
+            description: The unique identifier of the product info 
+            type: string
+        top:
+            description: The number of the items size 
+            type: integer
+        skip:
+            description: The number of the skipped items 
+            type: integer
         SpacecraftId:
             description: The unique identifier of a spacecraft
             type: string
