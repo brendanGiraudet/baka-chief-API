@@ -13,7 +13,7 @@ namespace bakaChiefApplication.API.DatabaseModels
         
         public string? ImageFilePath { get; set; }
         
-        public ICollection<RecipIngredient> RecipIngredients { get; set; }
+        public ICollection<RecipProductInfo> RecipProductInfos { get; set; }
         
         public ICollection<RecipStep> RecipSteps { get; set; }
     }

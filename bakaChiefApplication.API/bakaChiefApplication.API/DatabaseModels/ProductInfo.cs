@@ -208,4 +208,6 @@ public class ProductInfo
     public string? carnitine_100g { get; set; }
     public string? sulphate_100g { get; set; }
     public string? nitrate_100g { get; set; }
+
+    public ICollection<RecipProductInfo>? RecipProductInfos { get; set; }
 }

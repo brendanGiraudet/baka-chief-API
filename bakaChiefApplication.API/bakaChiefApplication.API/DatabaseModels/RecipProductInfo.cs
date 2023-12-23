@@ -1,8 +1,8 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace bakaChiefApplication.API.DatabaseModels
 {
-    public class RecipProducts
+    public class RecipProductInfo
     {
         [Key]
         public string Id { get; set; } = Guid.NewGuid().ToString();

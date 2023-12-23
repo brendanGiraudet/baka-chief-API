@@ -15,18 +15,16 @@ namespace bakaChiefApplication.API.Repositories.RecipsRepository
         public async Task<IEnumerable<Recip>> GetRecipsAsync()
         {
             return await Task.FromResult(_dbContext.Recips
-                .Include(r => r.RecipIngredients)
-                    .ThenInclude(ri => ri.Ingredient)
-                        .ThenInclude(i => i.Nutriments)
+                .Include(r => r.RecipProductInfos)
+                    .ThenInclude(ri => ri.ProductInfo)
                 .Include(r => r.RecipSteps));
         }
 
         public async Task<Recip> GetRecipByIdAsync(string id)
         {
             return await _dbContext.Recips
-                .Include(r => r.RecipIngredients)
-                    .ThenInclude(ri => ri.Ingredient)
-                        .ThenInclude(i => i.Nutriments)
+                .Include(r => r.RecipProductInfos)
+                    .ThenInclude(ri => ri.ProductInfo)
                 .Include(r => r.RecipSteps)
                 .FirstOrDefaultAsync(r => r.Id == id);
         }

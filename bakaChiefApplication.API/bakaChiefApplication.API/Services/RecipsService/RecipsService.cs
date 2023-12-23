@@ -1,18 +1,18 @@
 ﻿using bakaChiefApplication.API.DatabaseModels;
 using bakaChiefApplication.API.Repositories.RecipsRepository;
-using bakaChiefApplication.API.Services.IngredientsService;
+using bakaChiefApplication.API.Services.ProductInfoService;
 
 namespace bakaChiefApplication.API.Services.RecipsService
 {
     public class RecipsService : IRecipsService
     {
         private readonly IRecipsRepository _recipRepository;
-        private readonly IIngredientsService _ingredientService;
+        private readonly IProductInfoService _productInfoService;
 
-        public RecipsService(IRecipsRepository recipRepository, IIngredientsService ingredientService)
+        public RecipsService(IRecipsRepository recipRepository, IProductInfoService productInfoService)
         {
             _recipRepository = recipRepository ?? throw new ArgumentNullException(nameof(recipRepository));
-            _ingredientService = ingredientService;
+            _productInfoService = productInfoService;
         }
 
         public async Task<IEnumerable<Recip>> GetRecipsAsync()
@@ -27,20 +27,20 @@ namespace bakaChiefApplication.API.Services.RecipsService
 
         public async Task CreateRecipAsync(Recip recip)
         {
-            recip.RecipIngredients = await GetExistingRecipIngredient(recip.RecipIngredients);
+            recip.RecipProductInfos = await GetExistingRecipIngredient(recip.RecipProductInfos);
             await _recipRepository.CreateRecipAsync(recip);
         }
 
-        private async Task<List<RecipIngredient>> GetExistingRecipIngredient(ICollection<RecipIngredient> recipIngredients)
+        private async Task<List<RecipProductInfo>> GetExistingRecipIngredient(ICollection<RecipProductInfo> recipProductInfos)
         {
-            var existingRecipIngredient = new List<RecipIngredient>();
-            foreach (var recipIngredient in recipIngredients)
+            var existingRecipIngredient = new List<RecipProductInfo>();
+            foreach (var recipIngredient in recipProductInfos)
             {
-                var existingIngredient = await _ingredientService.GetIngredientByIdAsync(recipIngredient.Ingredient.Id);
+                var existingIngredient = await _productInfoService.GetProductInfoByIdAsync(recipIngredient.ProductInfo.code);
 
                 if (existingIngredient != null)
                 {
-                    recipIngredient.Ingredient = existingIngredient;
+                    recipIngredient.ProductInfo = existingIngredient;
                     existingRecipIngredient.Add(recipIngredient);
                 }
             }
@@ -50,7 +50,7 @@ namespace bakaChiefApplication.API.Services.RecipsService
 
         public async Task UpdateRecipAsync(Recip recip)
         {
-            recip.RecipIngredients = await GetExistingRecipIngredient(recip.RecipIngredients);
+            recip.RecipProductInfos = await GetExistingRecipIngredient(recip.RecipProductInfos);
 
             await _recipRepository.UpdateRecipAsync(recip);
         }
