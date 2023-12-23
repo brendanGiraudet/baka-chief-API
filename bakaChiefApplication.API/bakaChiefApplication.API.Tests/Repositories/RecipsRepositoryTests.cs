@@ -40,11 +40,8 @@ namespace bakaChiefApplication.API.Tests.Repositories
             var repository = GetRepository();
 
             // Arrange
-            var nutriment = new Nutriment{ Name = "nutriment"};
-            var ingredient = new Ingredient{ Name = "ingredient", Nutriments = new HashSet<Nutriment>() { nutriment } };
             var recipStep = new RecipStep{ Number = 1 , Description = "desc "};
-            var recipIngredient = new RecipIngredient{ Ingredient = ingredient, Quantity = 1, MeasureUnit = "gr" };
-            var recip1 = new Recip { Name = "Recip 1", RecipIngredients = new List<RecipIngredient>(){ recipIngredient }, RecipSteps = new List<RecipStep>{recipStep} };
+            var recip1 = new Recip { Name = "Recip 1", RecipProductInfos = new List<RecipProductInfo>(), RecipSteps = new List<RecipStep>{recipStep} };
             _databaseContext.Recips.Add(recip1);
             await _databaseContext.SaveChangesAsync();
 
