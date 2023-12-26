@@ -11,7 +11,7 @@ image:
   pullPolicy: Always
   # pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "1.2.2"
+  tag: "{{ .Chart.AppVersion }}"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -91,7 +91,7 @@ affinity: {}
 
 environmentVar:
   - name: Version
-    value: "1.0.0"
+    value: "{{ .Chart.AppVersion }}"
     
   - name: ASPNETCORE_ENVIRONMENT
     value: "Production"
