@@ -1,4 +1,5 @@
 using bakaChiefApplication.API.DatabaseModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace bakaChiefApplication.API.Repositories.ProductInfoRepository;
 
@@ -6,9 +7,12 @@ public class ProductInfoRepository : IProductInfoRepository
 {
     private readonly DatabaseContext _dbContext;
 
+    private IAsyncEnumerable<ProductInfo> _products;
+
     public ProductInfoRepository(DatabaseContext dbContext)
     {
         _dbContext = dbContext;
+        _products = dbContext.Products.AsAsyncEnumerable();
     }
 
     public async Task CreateProductInfoAsync(ProductInfo productInfo)
@@ -26,12 +30,17 @@ public class ProductInfoRepository : IProductInfoRepository
 
     public async Task<ProductInfo?> GetProductInfoByIdAsync(string id)
     {
-        return await _dbContext.Products.FindAsync(id);
+        return  await _dbContext.Products.FirstOrDefaultAsync(p => p.code == id);
     }
 
-    public async Task<IEnumerable<ProductInfo>> GetProductInfosAsync()
+    public async Task<IAsyncEnumerable<ProductInfo>> GetProductInfosAsync()
     {
-        return _dbContext.Products.Take(1000);
+        if(_products == null)
+        {
+            _products = _dbContext.Products.AsAsyncEnumerable();
+        }
+        
+        return _products;
     }
 
     public async Task UpdateProductInfoAsync(ProductInfo ProductInfo)

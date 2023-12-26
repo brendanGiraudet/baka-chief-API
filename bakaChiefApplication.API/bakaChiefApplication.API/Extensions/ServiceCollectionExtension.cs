@@ -14,7 +14,8 @@ public static class ServiceCollectionExtension
     public static void AddRepositories(this IServiceCollection services)
     {
         services.AddTransient<IRecipsRepository, RecipsRepository>();
-        services.AddTransient<IProductInfoRepository, ProductInfoRepository>();
+        
+        services.AddScoped<IProductInfoRepository, ProductInfoRepository>();
     }
 
     public static void AddServices(this IServiceCollection services)

@@ -1,6 +1,5 @@
 ﻿using bakaChiefApplication.API.DatabaseModels;
 using bakaChiefApplication.API.EqualityComparer;
-using bakaChiefApplication.API.Extensions;
 using bakaChiefApplication.API.Repositories.ProductInfoRepository;
 
 namespace bakaChiefApplication.API.Services.ProductInfoService
@@ -31,11 +30,11 @@ namespace bakaChiefApplication.API.Services.ProductInfoService
             return await _productInfoRepository.GetProductInfoByIdAsync(id);
         }
 
-        public async Task<IEnumerable<ProductInfoLight>> GetProductInfosAsync()
+        public async Task<IAsyncEnumerable<ProductInfo>> GetProductInfosAsync()
         {
             var products = await _productInfoRepository.GetProductInfosAsync();
             
-            return products.ToProductInfosLight();
+            return products;
         }
 
         public async Task UpdateProductInfoAsync(ProductInfo ProductInfoType)

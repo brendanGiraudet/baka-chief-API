@@ -1,5 +1,5 @@
 ﻿using bakaChiefApplication.API.DatabaseModels;
-using bakaChiefApplication.API.Repositories;
+using bakaChiefApplication.API.Repositories.ProductInfoRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
@@ -8,20 +8,20 @@ namespace bakaChiefApplication.API.Controllers;
 
 public class ProductInfosController : ODataController
 {
-    private readonly DatabaseContext _databaseContext;
+    private readonly IProductInfoRepository _productInfoRepository;
 
-    public ProductInfosController(DatabaseContext databaseContext)
+    public ProductInfosController(IProductInfoRepository productInfoRepository)
     {
-        _databaseContext = databaseContext;
+        _productInfoRepository = productInfoRepository;
     }
 
     [EnableQuery]
-    public async Task<ActionResult<IQueryable<ProductInfo>>> GetAsync() => Ok(_databaseContext.Products);
+    public async Task<ActionResult<IAsyncEnumerable<ProductInfo>>> GetAsync() => Ok(await _productInfoRepository.GetProductInfosAsync());
 
     [EnableQuery]
     public async Task<ActionResult<ProductInfo>> GetAsync([FromRoute] string key)
     {
-        var product = _databaseContext.Products.FirstOrDefault(p => p.code == key);
+        var product = await _productInfoRepository.GetProductInfoByIdAsync(key);
 
         if (product == null)
         {
