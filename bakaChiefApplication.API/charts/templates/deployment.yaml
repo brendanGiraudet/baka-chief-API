@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: {{ .Values.applicationName }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
         ports:
         - containerPort: {{ .Values.service.port }}
         
@@ -26,10 +26,30 @@ spec:
           {{- toYaml . | nindent 8 }}
         {{- end }}
         
-        {{- with .Values.environmentVar }}
         env:
-          {{- toYaml . | nindent 8 }}
-        {{- end }}
+          - name: Version
+            value: "{{ .Chart.AppVersion }}"
+            
+          - name: ASPNETCORE_ENVIRONMENT
+            value: "{{ .Values.environmentVar.ENVIRONMENT }}"
+
+          - name: ASPNETCORE_HTTPS_PORT
+            value: "{{ .Values.service.port }}"
+
+          - name: ASPNETCORE_Kestrel__Certificates__Default__KeyPath
+            value: "{{ .Values.environmentVar.CertificatesKeyPath }}"
+
+          - name: ASPNETCORE_Kestrel__Certificates__Default__Path
+            value: "{{ .Values.environmentVar.CertificatesPath }}"
+
+          - name: ASPNETCORE_URLS
+            value: "https://+:{{ .Values.service.port }}"
+            
+          - name: EnableFeatures__IsEnableSwagger
+            value: "{{ .Values.environmentVar.IsEnableSwagger }}"
+
+          - name: ConnectionStrings__Database
+            value: "{{ .Values.environmentVar.ConnectionStringsDatabase }}"
       
       {{- with .Values.volumes }}
       volumes:

@@ -11,7 +11,6 @@ image:
   pullPolicy: Always
   # pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "{{ .Chart.AppVersion }}"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -90,26 +89,14 @@ tolerations: []
 affinity: {}
 
 environmentVar:
-  - name: Version
-    value: "{{ .Chart.AppVersion }}"
+  ENVIRONMENT: "Production"
+
+  CertificatesKeyPath: "/https/private.key"
+
+  CertificatesPath: "/https/certificate.crt"
+
+  ASPNETCORE_URLS: "https://+:3636"
     
-  - name: ASPNETCORE_ENVIRONMENT
-    value: "Production"
+  IsEnableSwagger: "true"
 
-  - name: ASPNETCORE_HTTPS_PORT
-    value: "3636"
-
-  - name: ASPNETCORE_Kestrel__Certificates__Default__KeyPath
-    value: "/https/private.key"
-
-  - name: ASPNETCORE_Kestrel__Certificates__Default__Path
-    value: "/https/certificate.crt"
-
-  - name: ASPNETCORE_URLS
-    value: "https://+:3636"
-    
-  - name: EnableFeatures__IsEnableSwagger
-    value: "true"
-
-  - name: ConnectionStrings__Database
-    value: "Data Source=/app/database/database.db"
+  ConnectionStringsDatabase: "Data Source=/app/database/database.db"
