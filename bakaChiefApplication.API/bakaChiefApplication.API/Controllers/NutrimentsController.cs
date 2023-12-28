@@ -35,9 +35,25 @@ public class NutrimentsController : ODataController
     public async Task<ActionResult> PostAsync([FromBody] Nutriment nutriment)
     {
         await _databaseContext.Nutriments.AddAsync(nutriment);
-        
+
         await _databaseContext.SaveChangesAsync();
 
         return Created(nutriment);
+    }
+
+    public async Task<ActionResult> Put([FromRoute] string key, [FromBody] Nutriment updatedNutriment)
+    {
+        var nutriment = await _databaseContext.Nutriments.FirstOrDefaultAsync(n => n.Id == key);
+
+        if (nutriment == null)
+        {
+            return NotFound();
+        }
+
+        nutriment.Name = updatedNutriment.Name;
+
+        await _databaseContext.SaveChangesAsync();
+
+        return Updated(nutriment);
     }
 }
