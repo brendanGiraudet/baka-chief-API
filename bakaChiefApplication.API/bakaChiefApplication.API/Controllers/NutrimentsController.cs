@@ -31,4 +31,13 @@ public class NutrimentsController : ODataController
 
         return Ok(nutriment);
     }
+
+    public async Task<ActionResult> PostAsync([FromBody] Nutriment nutriment)
+    {
+        await _databaseContext.Nutriments.AddAsync(nutriment);
+        
+        await _databaseContext.SaveChangesAsync();
+
+        return Created(nutriment);
+    }
 }
