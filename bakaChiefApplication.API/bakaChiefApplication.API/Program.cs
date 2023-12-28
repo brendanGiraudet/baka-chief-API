@@ -3,16 +3,24 @@ using Login.Extensions;
 using Microsoft.AspNetCore.OData;
 using Microsoft.OData.ModelBuilder;
 using bakaChiefApplication.API.DatabaseModels;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var modelBuilder = new ODataConventionModelBuilder();
 modelBuilder.EntitySet<Nutriment>("Nutriments");
+modelBuilder.EntitySet<Ingredient>("Ingredients");
 
 builder.Services.AddControllers().AddOData(
     options => options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(100).AddRouteComponents(
         "odata",
-        modelBuilder.GetEdmModel()));
+        modelBuilder.GetEdmModel()))
+    .AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
+
+
 
 builder.Services.AddSwaggerGen();
 
