@@ -15,16 +15,12 @@ namespace bakaChiefApplication.API.Repositories.RecipsRepository
         public async Task<IEnumerable<Recip>> GetRecipsAsync()
         {
             return await Task.FromResult(_dbContext.Recips
-                .Include(r => r.RecipProductInfos)
-                    .ThenInclude(ri => ri.ProductInfo)
                 .Include(r => r.RecipSteps));
         }
 
-        public async Task<Recip> GetRecipByIdAsync(string id)
+        public async Task<Recip?> GetRecipByIdAsync(string id)
         {
             return await _dbContext.Recips
-                .Include(r => r.RecipProductInfos)
-                    .ThenInclude(ri => ri.ProductInfo)
                 .Include(r => r.RecipSteps)
                 .FirstOrDefaultAsync(r => r.Id == id);
         }
@@ -50,6 +46,7 @@ namespace bakaChiefApplication.API.Repositories.RecipsRepository
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine($"Error {ex.Message}");
                     await dbContextTransaction.RollbackAsync();
                 }
             }

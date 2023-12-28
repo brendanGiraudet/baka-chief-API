@@ -41,7 +41,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
 
             // Arrange
             var recipStep = new RecipStep{ Number = 1 , Description = "desc "};
-            var recip1 = new Recip { Name = "Recip 1", RecipProductInfos = new List<RecipProductInfo>(), RecipSteps = new List<RecipStep>{recipStep} };
+            var recip1 = new Recip { Name = "Recip 1", RecipSteps = new List<RecipStep>{recipStep} };
             _databaseContext.Recips.Add(recip1);
             await _databaseContext.SaveChangesAsync();
 
@@ -49,7 +49,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
             var result = await repository.GetRecipsAsync();
 
             // Assert
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.Contains(result, r => r.Name == "Recip 1");
         }
 
@@ -60,7 +60,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
 
             // Arrange
             var recip = new Recip { Name = "Test Recip" };
-            repository.CreateRecipAsync(recip);
+            await repository.CreateRecipAsync(recip);
 
             // Act
             var result = await repository.GetRecipByIdAsync(recip.Id);
@@ -85,7 +85,7 @@ namespace bakaChiefApplication.API.Tests.Repositories
             var updatedRecip = await repository.GetRecipByIdAsync(recip.Id);
 
             // Assert
-            Assert.Equal("New Name", updatedRecip.Name);
+            Assert.Equal("New Name", updatedRecip?.Name);
         }
 
         [Fact]

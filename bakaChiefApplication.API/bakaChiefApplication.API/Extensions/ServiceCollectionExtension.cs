@@ -1,8 +1,6 @@
 ﻿using bakaChiefApplication.API.Options;
 using bakaChiefApplication.API.Repositories;
-using bakaChiefApplication.API.Repositories.ProductInfoRepository;
 using bakaChiefApplication.API.Repositories.RecipsRepository;
-using bakaChiefApplication.API.Services.ProductInfoService;
 using bakaChiefApplication.API.Services.RecipsService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -14,14 +12,11 @@ public static class ServiceCollectionExtension
     public static void AddRepositories(this IServiceCollection services)
     {
         services.AddTransient<IRecipsRepository, RecipsRepository>();
-        
-        services.AddScoped<IProductInfoRepository, ProductInfoRepository>();
     }
 
     public static void AddServices(this IServiceCollection services)
     {
         services.AddTransient<IRecipsService, RecipsService>();
-        services.AddTransient<IProductInfoService, ProductInfoService>();
 
         services.AddScoped<IMemoryCache, MemoryCache>();
     }

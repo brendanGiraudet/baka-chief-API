@@ -9,8 +9,9 @@ namespace bakaChiefApplication.API.DatabaseModels
 
         public int Number { get; set; }
         
-        public string Description { get; set; }
+        [Required]
+        public string Description { get; set; } = string.Empty;
 
-        public Recip? Recip { get; set; }
+        public Recip Recip { get; set; } = new();
     }
 }

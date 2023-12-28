@@ -7,14 +7,15 @@ namespace bakaChiefApplication.API.DatabaseModels
         [Key]
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
-        public string Name { get; set; }
-        
-        public int  PersonsNumber { get; set; }
-        
-        public string? ImageFilePath { get; set; }
-        
-        public ICollection<RecipProductInfo> RecipProductInfos { get; set; }
-        
-        public ICollection<RecipStep> RecipSteps { get; set; }
+        [Required]
+        public string Name { get; set; } = string.Empty;
+
+        public int PersonsNumber { get; set; }
+
+        public string? ImageUrl { get; set; }
+
+        public HashSet<Ingredient> Ingredients { get; set; } = new();
+
+        public HashSet<RecipStep> RecipSteps { get; set; } = new();
     }
 }

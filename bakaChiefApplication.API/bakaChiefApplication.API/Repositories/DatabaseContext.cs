@@ -14,18 +14,32 @@ namespace bakaChiefApplication.API.Repositories
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<ProductInfo>().HasMany(i => i.RecipProductInfos).WithOne(j => j.ProductInfo).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Nutriment>().HasMany(i => i.Ingredients).WithMany(j => j.Nutriments).UsingEntity<IngredientNutriment>();
             
-            modelBuilder.Entity<Recip>().HasMany(i => i.RecipProductInfos).WithOne(j => j.Recip).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Ingredient>().HasMany(i => i.Recips).WithMany(j => j.Ingredients).UsingEntity<RecipIngredient>();
             
             modelBuilder.Entity<Recip>().HasMany(i => i.RecipSteps).WithOne(j => j.Recip).OnDelete(DeleteBehavior.Cascade);
         }
 
-
         /// <summary>
-        /// Gets or sets the <see cref="DbSet{RecipProductInfo}"/>.
+        /// Gets or sets the <see cref="DbSet{Nutriment}"/>.
         /// </summary>
-        public virtual DbSet<RecipProductInfo> RecipProductInfos { get; set; }
+        public virtual DbSet<Nutriment> Nutriments { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the <see cref="DbSet{IngredientNutriment}"/>.
+        /// </summary>
+        public virtual DbSet<IngredientNutriment> IngredientNutriments { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the <see cref="DbSet{Ingredient}"/>.
+        /// </summary>
+        public virtual DbSet<Ingredient> Ingredients { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the <see cref="DbSet{RecipIngredient}"/>.
+        /// </summary>
+        public virtual DbSet<RecipIngredient> RecipIngredients { get; set; }
         
         /// <summary>
         /// Gets or sets the <see cref="DbSet{Recip}"/>.
@@ -36,10 +50,5 @@ namespace bakaChiefApplication.API.Repositories
         /// Gets or sets the <see cref="DbSet{RecipStep}"/>.
         /// </summary>
         public virtual DbSet<RecipStep> RecipSteps { get; set; }
-        
-        /// <summary>
-        /// Gets or sets the <see cref="DbSet{ProductInfo}"/>.
-        /// </summary>
-        public virtual DbSet<ProductInfo> Products { get; set; }
     }
 }
