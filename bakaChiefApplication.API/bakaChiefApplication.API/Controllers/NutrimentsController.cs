@@ -1,6 +1,7 @@
 ﻿using bakaChiefApplication.API.DatabaseModels;
 using bakaChiefApplication.API.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Deltas;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Microsoft.EntityFrameworkCore;
@@ -51,6 +52,22 @@ public class NutrimentsController : ODataController
         }
 
         nutriment.Name = updatedNutriment.Name;
+
+        await _databaseContext.SaveChangesAsync();
+
+        return Updated(nutriment);
+    }
+
+    public async Task<ActionResult> Patch([FromRoute] string key, [FromBody] Delta<Nutriment> delta)
+    {
+        var nutriment = await _databaseContext.Nutriments.FirstOrDefaultAsync(n => n.Id == key);
+
+        if (nutriment == null)
+        {
+            return NotFound();
+        }
+
+        delta.Patch(nutriment);
 
         await _databaseContext.SaveChangesAsync();
 
