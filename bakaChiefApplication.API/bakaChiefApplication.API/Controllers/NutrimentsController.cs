@@ -42,7 +42,7 @@ public class NutrimentsController : ODataController
         return Created(nutriment);
     }
 
-    public async Task<ActionResult> Put([FromRoute] string key, [FromBody] Nutriment updatedNutriment)
+    public async Task<ActionResult> PutAsync([FromRoute] string key, [FromBody] Nutriment updatedNutriment)
     {
         var nutriment = await _databaseContext.Nutriments.FirstOrDefaultAsync(n => n.Id == key);
 
@@ -58,7 +58,7 @@ public class NutrimentsController : ODataController
         return Updated(nutriment);
     }
 
-    public async Task<ActionResult> Patch([FromRoute] string key, [FromBody] Delta<Nutriment> delta)
+    public async Task<ActionResult> PatchAsync([FromRoute] string key, [FromBody] Delta<Nutriment> delta)
     {
         var nutriment = await _databaseContext.Nutriments.FirstOrDefaultAsync(n => n.Id == key);
 
@@ -72,5 +72,21 @@ public class NutrimentsController : ODataController
         await _databaseContext.SaveChangesAsync();
 
         return Updated(nutriment);
+    }
+
+    public async Task<ActionResult> Delete([FromRoute] string key)
+    {
+        var nutriment = await _databaseContext.Nutriments.FirstOrDefaultAsync(n => n.Id == key);
+
+        if (nutriment == null)
+        {
+            return NotFound();
+        }
+
+        _databaseContext.Nutriments.Remove(nutriment);
+
+        await _databaseContext.SaveChangesAsync();
+
+        return NoContent();
     }
 }
