@@ -68,6 +68,9 @@ public class IngredientsController : ODataController
         ingredient.ImageUrl = updatedIngredient.ImageUrl;
         ingredient.KcalNumber = updatedIngredient.KcalNumber;
 
+        var existedNutriments = GetExistingNutriments(updatedIngredient.Nutriments);
+        ingredient.Nutriments = existedNutriments;
+
         await _databaseContext.SaveChangesAsync();
 
         return Updated(ingredient);

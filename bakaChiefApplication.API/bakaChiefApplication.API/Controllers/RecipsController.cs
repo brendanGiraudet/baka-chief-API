@@ -1,71 +1,111 @@
 ﻿using bakaChiefApplication.API.DatabaseModels;
-using bakaChiefApplication.API.Services.RecipsService;
+using bakaChiefApplication.API.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Deltas;
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OData.Routing.Controllers;
+using Microsoft.EntityFrameworkCore;
 
-namespace bakaChiefApplication.API.Controllers
+namespace bakaChiefApplication.API.Controllers;
+
+public class RecipsController : ODataController
 {
-    [Route("api/recips")]
-    [ApiController]
-    public class RecipsController : ControllerBase
+    private readonly DatabaseContext _databaseContext;
+
+    public RecipsController(DatabaseContext databaseContext)
     {
-        private readonly IRecipsService _recipService;
+        _databaseContext = databaseContext;
+    }
 
-        public RecipsController(IRecipsService recipService)
+    [EnableQuery]
+    public ActionResult<IAsyncEnumerable<Recip>> Get() => Ok(_databaseContext.Recips);
+
+    [EnableQuery]
+    public async Task<ActionResult<Recip>> GetAsync([FromRoute] string key)
+    {
+        var recip = await _databaseContext.Recips.FirstOrDefaultAsync(n => n.Id == key);
+
+        if (recip == null)
         {
-            _recipService = recipService ?? throw new ArgumentNullException(nameof(recipService));
+            return NotFound();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetRecips()
-        {
-            var recips = await _recipService.GetRecipsAsync();
+        return Ok(recip);
+    }
 
-           return StatusCode(StatusCodes.Status200OK, recips);
+    public async Task<ActionResult> PostAsync([FromBody] Recip recip)
+    {
+        var existedIngredients = GetExistingIngredients(recip.Ingredients);
+        
+        recip.Ingredients = existedIngredients;
+
+        await _databaseContext.Recips.AddAsync(recip);
+
+        await _databaseContext.SaveChangesAsync();
+
+        return Created(recip);
+    }
+
+    private HashSet<Ingredient> GetExistingIngredients(HashSet<Ingredient> ingredients)
+    {
+        var ids = ingredients.Select(n => n.Id);
+
+        var existedIngredients = _databaseContext.Ingredients.Where(n => ids.Contains(n.Id));
+
+        return existedIngredients.ToHashSet();
+    }
+
+    public async Task<ActionResult> PutAsync([FromRoute] string key, [FromBody] Recip updatedRecip)
+    {
+        var recip = await _databaseContext.Recips.FirstOrDefaultAsync(n => n.Id == key);
+
+        if (recip == null)
+        {
+            return NotFound();
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetRecipById(string id)
+        recip.Name = updatedRecip.Name;
+        recip.PersonsNumber = updatedRecip.PersonsNumber;
+        recip.ImageUrl = updatedRecip.ImageUrl;
+
+        var existedIngredients = GetExistingIngredients(updatedRecip.Ingredients);
+        
+        recip.Ingredients = existedIngredients;
+
+        await _databaseContext.SaveChangesAsync();
+
+        return Updated(recip);
+    }
+
+    public async Task<ActionResult> PatchAsync([FromRoute] string key, [FromBody] Delta<Recip> delta)
+    {
+        var recip = await _databaseContext.Recips.FirstOrDefaultAsync(n => n.Id == key);
+
+        if (recip == null)
         {
-            var recip = await _recipService.GetRecipByIdAsync(id);
-            if (recip == null)
-            {
-                return NotFound();
-            }
-            return Ok(recip);
+            return NotFound();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateRecip(Recip recip)
+        delta.Patch(recip);
+
+        await _databaseContext.SaveChangesAsync();
+
+        return Updated(recip);
+    }
+
+    public async Task<ActionResult> Delete([FromRoute] string key)
+    {
+        var recip = await _databaseContext.Recips.FirstOrDefaultAsync(n => n.Id == key);
+
+        if (recip == null)
         {
-            await _recipService.CreateRecipAsync(recip);
-            return CreatedAtAction(nameof(GetRecipById), new { id = recip.Id }, recip);
+            return NotFound();
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateRecip(string id, Recip recip)
-        {
-            if (id != recip.Id)
-            {
-                return BadRequest();
-            }
+        _databaseContext.Recips.Remove(recip);
 
-            await _recipService.UpdateRecipAsync(recip);
+        await _databaseContext.SaveChangesAsync();
 
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRecip(string id)
-        {
-            var recip = await _recipService.GetRecipByIdAsync(id);
-            if (recip == null)
-            {
-                return NotFound();
-            }
-
-            await _recipService.DeleteRecipAsync(id);
-
-            return NoContent();
-        }
+        return NoContent();
     }
 }
