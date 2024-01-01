@@ -36,9 +36,9 @@ public class IngredientsController : ODataController
     public async Task<ActionResult> PostAsync([FromBody] Ingredient ingredient)
     {
         var existedNutriments = GetExistingNutriments(ingredient.Nutriments);
-        
+
         ingredient.Nutriments = existedNutriments;
-        
+
         await _databaseContext.Ingredients.AddAsync(ingredient);
 
         await _databaseContext.SaveChangesAsync();
@@ -57,7 +57,7 @@ public class IngredientsController : ODataController
 
     public async Task<ActionResult> PutAsync([FromRoute] string key, [FromBody] Ingredient updatedIngredient)
     {
-        var ingredient = await _databaseContext.Ingredients.FirstOrDefaultAsync(n => n.Id == key);
+        var ingredient = await _databaseContext.Ingredients.Include(i => i.Nutriments).FirstOrDefaultAsync(n => n.Id == key);
 
         if (ingredient == null)
         {
@@ -68,17 +68,41 @@ public class IngredientsController : ODataController
         ingredient.ImageUrl = updatedIngredient.ImageUrl;
         ingredient.KcalNumber = updatedIngredient.KcalNumber;
 
-        var existedNutriments = GetExistingNutriments(updatedIngredient.Nutriments);
-        ingredient.Nutriments = existedNutriments;
+        using var dbContextTransaction = _databaseContext.Database.BeginTransaction();
 
-        await _databaseContext.SaveChangesAsync();
+        try
+        {
+            var nutrimentsToDelete = GetNutrimentsToDelete(ingredient, updatedIngredient.Nutriments);
+            
+            if(nutrimentsToDelete.Count() != 0) _databaseContext.IngredientNutriments.RemoveRange(nutrimentsToDelete);
 
-        return Updated(ingredient);
+            var existedNutriments = GetExistingNutriments(updatedIngredient.Nutriments);
+            ingredient.Nutriments = existedNutriments;
+
+            await _databaseContext.SaveChangesAsync();
+
+            await dbContextTransaction.CommitAsync();
+
+            return Updated(ingredient);
+        }
+        catch (System.Exception ex)
+        {
+            await dbContextTransaction.RollbackAsync();
+
+            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+        }
+    }
+
+    private IEnumerable<IngredientNutriment> GetNutrimentsToDelete(Ingredient currentIngredient, HashSet<Nutriment> expectedNutriments)
+    {
+        var nutrimentIdsToDelete = currentIngredient.Nutriments.Where(n => expectedNutriments.FirstOrDefault(e => e.Id == n.Id) == null).Select(n => n.Id);
+
+        return _databaseContext.IngredientNutriments.Where(i => i.IngredientId == currentIngredient.Id && nutrimentIdsToDelete.Contains(i.NutrimentId));
     }
 
     public async Task<ActionResult> PatchAsync([FromRoute] string key, [FromBody] Delta<Ingredient> delta)
     {
-        var ingredient = await _databaseContext.Ingredients.FirstOrDefaultAsync(n => n.Id == key);
+        var ingredient = await _databaseContext.Ingredients.Include(i => i.Nutriments).FirstOrDefaultAsync(n => n.Id == key);
 
         if (ingredient == null)
         {
