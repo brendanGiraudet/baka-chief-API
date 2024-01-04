@@ -1,21 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace bakaChiefApplication.API.DatabaseModels
+namespace bakaChiefApplication.API.DatabaseModels;
+
+public class Recip
 {
-    public class Recip
-    {
-        [Key]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+    [Key]
+    public string Id { get; set; } = Guid.NewGuid().ToString();
 
-        [Required]
-        public string Name { get; set; } = string.Empty;
+    [Required]
+    public string Name { get; set; } = string.Empty;
 
-        public int PersonsNumber { get; set; }
+    public int PersonsNumber { get; set; }
 
-        public string? ImageUrl { get; set; }
+    public string? ImageUrl { get; set; }
 
-        public HashSet<RecipIngredient>? RecipIngredients { get; set; }
+    public HashSet<RecipIngredient>? RecipIngredients { get; set; }
 
-        public HashSet<RecipStep> RecipSteps { get; set; } = new();
-    }
+    public HashSet<RecipStep> RecipSteps { get; set; } = new();
 }
