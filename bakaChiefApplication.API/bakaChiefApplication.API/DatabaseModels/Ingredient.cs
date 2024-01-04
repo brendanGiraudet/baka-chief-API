@@ -15,8 +15,8 @@ namespace bakaChiefApplication.API.DatabaseModels
 
         public double KcalNumber { get; set; }
 
-        public HashSet<Nutriment> Nutriments { get; set; } = new();
+        public HashSet<IngredientNutriment>? IngredientNutriments { get; set; }
 
-        public HashSet<Recip> Recips { get; set; } = new();
+        public HashSet<RecipIngredient>? RecipIngredients { get; set; }
     }
 }

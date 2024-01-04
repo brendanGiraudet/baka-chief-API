@@ -14,7 +14,7 @@ namespace bakaChiefApplication.API.DatabaseModels
 
         public string? ImageUrl { get; set; }
 
-        public HashSet<Ingredient> Ingredients { get; set; } = new();
+        public HashSet<RecipIngredient>? RecipIngredients { get; set; }
 
         public HashSet<RecipStep> RecipSteps { get; set; } = new();
     }

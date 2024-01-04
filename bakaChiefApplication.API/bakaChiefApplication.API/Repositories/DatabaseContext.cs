@@ -14,38 +14,70 @@ namespace bakaChiefApplication.API.Repositories
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Nutriment>().HasMany(i => i.Ingredients).WithMany(j => j.Nutriments).UsingEntity<IngredientNutriment>();
-            
-            modelBuilder.Entity<Ingredient>().HasMany(i => i.Recips).WithMany(j => j.Ingredients).UsingEntity<RecipIngredient>();
-            
-            modelBuilder.Entity<Recip>().HasMany(i => i.RecipSteps).WithOne(j => j.Recip).OnDelete(DeleteBehavior.Cascade);
+            // NUTRIMENT
+            modelBuilder.Entity<Nutriment>()
+                .HasMany(i => i.IngredientNutriments)
+                .WithOne(j => j.Nutriment)
+                .HasForeignKey(e => e.NutrimentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // INGREDIENT NUTRIMENT
+            modelBuilder.Entity<IngredientNutriment>().HasKey(e => new { e.IngredientId, e.NutrimentId });
+
+            // INGREDIENT
+            modelBuilder.Entity<Ingredient>()
+                .HasMany(i => i.IngredientNutriments)
+                .WithOne(j => j.Ingredient)
+                .HasForeignKey(e => e.IngredientId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Ingredient>()
+                .HasMany(i => i.RecipIngredients)
+                .WithOne(j => j.Ingredient)
+                .HasForeignKey(e => e.IngredientId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // INGREDIENT RECIP
+            modelBuilder.Entity<RecipIngredient>().HasKey(e => new { e.IngredientId, e.RecipId });
+
+            // RECIP
+            modelBuilder.Entity<Recip>()
+                .HasMany(i => i.RecipIngredients)
+                .WithOne(j => j.Recip)
+                .HasForeignKey(e => e.RecipId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Recip>()
+                .HasMany(i => i.RecipSteps)
+                .WithOne(j => j.Recip)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         /// <summary>
         /// Gets or sets the <see cref="DbSet{Nutriment}"/>.
         /// </summary>
         public virtual DbSet<Nutriment> Nutriments { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the <see cref="DbSet{IngredientNutriment}"/>.
         /// </summary>
         public virtual DbSet<IngredientNutriment> IngredientNutriments { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the <see cref="DbSet{Ingredient}"/>.
         /// </summary>
         public virtual DbSet<Ingredient> Ingredients { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the <see cref="DbSet{RecipIngredient}"/>.
         /// </summary>
         public virtual DbSet<RecipIngredient> RecipIngredients { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the <see cref="DbSet{Recip}"/>.
         /// </summary>
         public virtual DbSet<Recip> Recips { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the <see cref="DbSet{RecipStep}"/>.
         /// </summary>

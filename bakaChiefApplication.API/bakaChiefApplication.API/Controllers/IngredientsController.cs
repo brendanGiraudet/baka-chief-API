@@ -35,10 +35,6 @@ public class IngredientsController : ODataController
 
     public async Task<ActionResult> PostAsync([FromBody] Ingredient ingredient)
     {
-        var existedNutriments = GetExistingNutriments(ingredient.Nutriments);
-
-        ingredient.Nutriments = existedNutriments;
-
         await _databaseContext.Ingredients.AddAsync(ingredient);
 
         await _databaseContext.SaveChangesAsync();
@@ -57,7 +53,7 @@ public class IngredientsController : ODataController
 
     public async Task<ActionResult> PutAsync([FromRoute] string key, [FromBody] Ingredient updatedIngredient)
     {
-        var ingredient = await _databaseContext.Ingredients.Include(i => i.Nutriments).FirstOrDefaultAsync(n => n.Id == key);
+        var ingredient = await _databaseContext.Ingredients.Include(i => i.IngredientNutriments).FirstOrDefaultAsync(n => n.Id == key);
 
         if (ingredient == null)
         {
@@ -72,12 +68,9 @@ public class IngredientsController : ODataController
 
         try
         {
-            var nutrimentsToDelete = GetNutrimentsToDelete(ingredient, updatedIngredient.Nutriments);
+            var nutrimentsToDelete = GetNutrimentsToDelete(ingredient, updatedIngredient.IngredientNutriments);
             
             if(nutrimentsToDelete.Count() != 0) _databaseContext.IngredientNutriments.RemoveRange(nutrimentsToDelete);
-
-            var existedNutriments = GetExistingNutriments(updatedIngredient.Nutriments);
-            ingredient.Nutriments = existedNutriments;
 
             await _databaseContext.SaveChangesAsync();
 
@@ -93,16 +86,16 @@ public class IngredientsController : ODataController
         }
     }
 
-    private IEnumerable<IngredientNutriment> GetNutrimentsToDelete(Ingredient currentIngredient, HashSet<Nutriment> expectedNutriments)
+    private IEnumerable<IngredientNutriment> GetNutrimentsToDelete(Ingredient currentIngredient, HashSet<IngredientNutriment> expectedNutriments)
     {
-        var nutrimentIdsToDelete = currentIngredient.Nutriments.Where(n => expectedNutriments.FirstOrDefault(e => e.Id == n.Id) == null).Select(n => n.Id);
+        var nutrimentIdsToDelete = currentIngredient.IngredientNutriments?.Where(n => n.IngredientId == currentIngredient.Id && !expectedNutriments.Any(a => a.NutrimentId == n.NutrimentId)).Select(n => n.NutrimentId) ?? Enumerable.Empty<string>();
 
         return _databaseContext.IngredientNutriments.Where(i => i.IngredientId == currentIngredient.Id && nutrimentIdsToDelete.Contains(i.NutrimentId));
     }
 
     public async Task<ActionResult> PatchAsync([FromRoute] string key, [FromBody] Delta<Ingredient> delta)
     {
-        var ingredient = await _databaseContext.Ingredients.Include(i => i.Nutriments).FirstOrDefaultAsync(n => n.Id == key);
+        var ingredient = await _databaseContext.Ingredients.Include(i => i.IngredientNutriments).FirstOrDefaultAsync(n => n.Id == key);
 
         if (ingredient == null)
         {

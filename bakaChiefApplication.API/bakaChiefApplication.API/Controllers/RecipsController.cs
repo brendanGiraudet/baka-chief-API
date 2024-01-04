@@ -35,10 +35,6 @@ public class RecipsController : ODataController
 
     public async Task<ActionResult> PostAsync([FromBody] Recip recip)
     {
-        var existedIngredients = GetExistingIngredients(recip.Ingredients);
-
-        recip.Ingredients = existedIngredients;
-        
         var existedSteps = GetExistingSteps(recip.RecipSteps);
 
         recip.RecipSteps = existedSteps;
@@ -70,7 +66,7 @@ public class RecipsController : ODataController
 
     public async Task<ActionResult> PutAsync([FromRoute] string key, [FromBody] Recip updatedRecip)
     {
-        var recip = await _databaseContext.Recips.Include(i => i.Ingredients).Include(i => i.RecipSteps).FirstOrDefaultAsync(n => n.Id == key);
+        var recip = await _databaseContext.Recips.Include(i => i.RecipIngredients).Include(i => i.RecipSteps).FirstOrDefaultAsync(n => n.Id == key);
 
         if (recip == null)
         {
@@ -85,13 +81,10 @@ public class RecipsController : ODataController
 
         try
         {
-            var ingredientsToDelete = GetIngredientsToDelete(recip, updatedRecip.Ingredients);
+            var ingredientsToDelete = GetIngredientsToDelete(recip, updatedRecip.RecipIngredients);
             
             if(ingredientsToDelete.Count() != 0) _databaseContext.RecipIngredients.RemoveRange(ingredientsToDelete);
 
-            var existedIngredients = GetExistingIngredients(updatedRecip.Ingredients);
-            recip.Ingredients = existedIngredients;
-            
             var stepsToDelete = GetStepsToDelete(recip, updatedRecip.RecipSteps);
             
             if(stepsToDelete.Count() != 0) _databaseContext.RecipSteps.RemoveRange(stepsToDelete);
@@ -120,16 +113,16 @@ public class RecipsController : ODataController
         return _databaseContext.RecipSteps.Where(i => stepIdsToDelete.Contains(i.Id));
     }
 
-    private IEnumerable<RecipIngredient> GetIngredientsToDelete(Recip currentRecip, HashSet<Ingredient> expectedIngredients)
+    private IEnumerable<RecipIngredient> GetIngredientsToDelete(Recip currentRecip, HashSet<RecipIngredient> expectedIngredients)
     {
-        var ingredientIdsToDelete = currentRecip.Ingredients.Where(n => expectedIngredients.FirstOrDefault(e => e.Id == n.Id) == null).Select(n => n.Id);
+        var ingredientIdsToDelete = currentRecip.RecipIngredients?.Where(n => n.RecipId == currentRecip.Id && !expectedIngredients.Any(e => e.IngredientId == n.IngredientId)).Select(n => n.IngredientId);
 
         return _databaseContext.RecipIngredients.Where(i => i.RecipId == currentRecip.Id && ingredientIdsToDelete.Contains(i.IngredientId));
     }
 
     public async Task<ActionResult> PatchAsync([FromRoute] string key, [FromBody] Delta<Recip> delta)
     {
-        var recip = await _databaseContext.Recips.Include(i => i.Ingredients).FirstOrDefaultAsync(n => n.Id == key);
+        var recip = await _databaseContext.Recips.Include(i => i.RecipIngredients).FirstOrDefaultAsync(n => n.Id == key);
 
         if (recip == null)
         {

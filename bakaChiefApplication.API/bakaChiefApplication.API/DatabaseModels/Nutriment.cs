@@ -10,5 +10,5 @@ public class Nutriment
     [Required]
     public string Name { get; set; } = string.Empty;
 
-    public HashSet<Ingredient> Ingredients { get; set; } = new();
+    public HashSet<IngredientNutriment>? IngredientNutriments { get; set; }
 }
