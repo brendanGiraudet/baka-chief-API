@@ -12,10 +12,12 @@ modelBuilder.EntitySet<Nutriment>("Nutriments");
 modelBuilder.EntitySet<Ingredient>("Ingredients");
 modelBuilder.EntitySet<Recip>("Recips");
 
-builder.Services.AddControllers().AddOData(
-    options => options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(100).AddRouteComponents(
-        "odata",
-        modelBuilder.GetEdmModel()))
+builder.Services.AddControllers()
+    .AddOData(
+        options => options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(100).AddRouteComponents(
+            "odata",
+            modelBuilder.GetEdmModel())
+    )
     .AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;

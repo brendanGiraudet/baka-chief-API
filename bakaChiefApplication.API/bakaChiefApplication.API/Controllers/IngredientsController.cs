@@ -35,6 +35,8 @@ public class IngredientsController : ODataController
 
     public async Task<ActionResult> PostAsync([FromBody] Ingredient ingredient)
     {
+        ingredient.IngredientNutriments = CleanIngredientNutriment(ingredient.IngredientNutriments);
+
         await _databaseContext.Ingredients.AddAsync(ingredient);
 
         await _databaseContext.SaveChangesAsync();
@@ -42,17 +44,25 @@ public class IngredientsController : ODataController
         return Created(ingredient);
     }
 
-    private HashSet<Nutriment> GetExistingNutriments(HashSet<Nutriment> nutriments)
+    private ICollection<IngredientNutriment> CleanIngredientNutriment(ICollection<IngredientNutriment> ingredients)
     {
-        var ids = nutriments.Select(n => n.Id);
+        // Force to update and not create nutriments
+            foreach (var ingred in ingredients)
+            {
+                ingred.Ingredient = null;
+                ingred.Nutriment = null;
+            }
 
-        var existedNutriments = _databaseContext.Nutriments.Where(n => ids.Contains(n.Id));
-
-        return existedNutriments.ToHashSet();
+        return ingredients;
     }
 
     public async Task<ActionResult> PutAsync([FromRoute] string key, [FromBody] Ingredient updatedIngredient)
     {
+        if (updatedIngredient == null)
+        {
+            return NoContent();
+        }
+
         var ingredient = await _databaseContext.Ingredients.Include(i => i.IngredientNutriments).FirstOrDefaultAsync(n => n.Id == key);
 
         if (ingredient == null)
@@ -68,9 +78,9 @@ public class IngredientsController : ODataController
 
         try
         {
-            var nutrimentsToDelete = GetNutrimentsToDelete(ingredient, updatedIngredient.IngredientNutriments);
-            
-            if(nutrimentsToDelete.Count() != 0) _databaseContext.IngredientNutriments.RemoveRange(nutrimentsToDelete);
+            RemoveMissingNutriments(updatedIngredient, ingredient);
+
+            ingredient.IngredientNutriments = CleanIngredientNutriment(updatedIngredient.IngredientNutriments);
 
             await _databaseContext.SaveChangesAsync();
 
@@ -86,7 +96,14 @@ public class IngredientsController : ODataController
         }
     }
 
-    private IEnumerable<IngredientNutriment> GetNutrimentsToDelete(Ingredient currentIngredient, HashSet<IngredientNutriment> expectedNutriments)
+    private void RemoveMissingNutriments(Ingredient updatedIngredient, Ingredient? ingredient)
+    {
+        var nutrimentsToDelete = GetNutrimentsToDelete(ingredient, updatedIngredient.IngredientNutriments);
+
+        if (nutrimentsToDelete.Count() != 0) _databaseContext.IngredientNutriments.RemoveRange(nutrimentsToDelete);
+    }
+
+    private IEnumerable<IngredientNutriment> GetNutrimentsToDelete(Ingredient currentIngredient, IEnumerable<IngredientNutriment> expectedNutriments)
     {
         var nutrimentIdsToDelete = currentIngredient.IngredientNutriments?.Where(n => n.IngredientId == currentIngredient.Id && !expectedNutriments.Any(a => a.NutrimentId == n.NutrimentId)).Select(n => n.NutrimentId) ?? Enumerable.Empty<string>();
 
