@@ -17,5 +17,5 @@ public class IngredientNutriment
     public string IngredientId { get; set; } = string.Empty;
 
     [JsonPropertyName("quantity")]
-    public double? Quantity { get; set; }
+    public double Quantity { get; set; } = default;
 }

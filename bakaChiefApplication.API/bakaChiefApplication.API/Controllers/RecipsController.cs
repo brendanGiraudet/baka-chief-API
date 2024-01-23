@@ -50,6 +50,8 @@ public class RecipsController : ODataController
 
     private ICollection<RecipStep> GetExistingSteps(ICollection<RecipStep> recipSteps)
     {
+        if(recipSteps is null) return recipSteps;
+        
          var ids = recipSteps.Select(n => n.Id);
 
         var existedSteps = _databaseContext.RecipSteps.Where(n => ids.Contains(n.Id));
