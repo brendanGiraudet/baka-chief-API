@@ -51,6 +51,11 @@ namespace bakaChiefApplication.API.Repositories
                 .HasMany(i => i.RecipSteps)
                 .WithOne(j => j.Recip)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // SELECTEDRECIPHISTORY    
+            modelBuilder.Entity<SelectedRecipHistory>()
+                .HasMany(i => i.Recips)
+                .WithMany(j => j.SelectedRecipHistories);
         }
 
         /// <summary>
@@ -82,5 +87,10 @@ namespace bakaChiefApplication.API.Repositories
         /// Gets or sets the <see cref="DbSet{RecipStep}"/>.
         /// </summary>
         public virtual DbSet<RecipStep> RecipSteps { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the <see cref="DbSet{SelectedRecipHistory}"/>.
+        /// </summary>
+        public virtual DbSet<SelectedRecipHistory> SelectedRecipHistories { get; set; }
     }
 }

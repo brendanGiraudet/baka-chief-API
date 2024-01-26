@@ -24,4 +24,7 @@ public class Recip
 
     [JsonPropertyName("recipSteps")]
     public ICollection<RecipStep> RecipSteps { get; set; }= new HashSet<RecipStep>();
+    
+    [JsonPropertyName("selectedRecipHistories")]
+    public ICollection<SelectedRecipHistory> SelectedRecipHistories { get; set; }= new HashSet<SelectedRecipHistory>();
 }
