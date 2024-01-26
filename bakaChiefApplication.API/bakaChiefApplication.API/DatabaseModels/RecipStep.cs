@@ -17,5 +17,5 @@ public class RecipStep
     public string Description { get; set; } = string.Empty;
 
     [JsonPropertyName("recip")]
-    public Recip Recip { get; set; } = new();
+    public Recip? Recip { get; set; }
 }
