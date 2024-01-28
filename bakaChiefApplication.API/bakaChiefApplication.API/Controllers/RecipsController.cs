@@ -61,6 +61,7 @@ public class RecipsController : ODataController
         recip.Name = updatedRecip.Name;
         recip.ImageUrl = updatedRecip.ImageUrl;
         recip.PersonsNumber = updatedRecip.PersonsNumber;
+        recip.Preparation = updatedRecip.Preparation;
 
         using var dbContextTransaction = _databaseContext.Database.BeginTransaction();
 
