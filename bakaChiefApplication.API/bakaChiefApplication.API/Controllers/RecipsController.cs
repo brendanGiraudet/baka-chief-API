@@ -35,8 +35,6 @@ public class RecipsController : ODataController
 
     public async Task<ActionResult> PostAsync([FromBody] Recip recip)
     {
-        recip.RecipSteps = CleanRecipStep(recip.RecipSteps);
-
         recip.RecipIngredients = CleanRecipIngredient(recip.RecipIngredients);
 
         await _databaseContext.Recips.AddAsync(recip);
@@ -53,7 +51,7 @@ public class RecipsController : ODataController
             return NoContent();
         }
 
-        var recip = await _databaseContext.Recips.Include(i => i.RecipIngredients).Include(i => i.RecipSteps).FirstOrDefaultAsync(n => n.Id == key);
+        var recip = await _databaseContext.Recips.Include(i => i.RecipIngredients).FirstOrDefaultAsync(n => n.Id == key);
 
         if (recip == null)
         {
@@ -72,12 +70,6 @@ public class RecipsController : ODataController
 
             recip.RecipIngredients = CleanRecipIngredient(updatedRecip.RecipIngredients);
 
-            RemoveMissingSteps(updatedRecip, recip);
-
-            recip.RecipSteps = CleanRecipStep(updatedRecip.RecipSteps);
-            
-            recip.RecipSteps = AssociateAlreadyExistRecipStep(recip.RecipSteps);
-
             await _databaseContext.SaveChangesAsync();
 
             await dbContextTransaction.CommitAsync();
@@ -92,37 +84,6 @@ public class RecipsController : ODataController
         }
     }
 
-    private ICollection<RecipStep> AssociateAlreadyExistRecipStep(ICollection<RecipStep> recipSteps)
-    {
-        var alreadyExistStep = GetExistingSteps(recipSteps);
-
-        if (alreadyExistStep.Count() > 0)
-        {
-            foreach (var recipStep in alreadyExistStep)
-            {
-                var existedRecipStep = recipSteps.FirstOrDefault(r => r.Id == recipStep.Id);
-                if (existedRecipStep != null)
-                {
-                    recipSteps.Remove(existedRecipStep);
-                    recipSteps = recipSteps.Append(recipStep).ToHashSet();
-                }
-            }
-        }
-
-        return recipSteps;
-    }
-
-    private ICollection<RecipStep> GetExistingSteps(ICollection<RecipStep> recipSteps)
-    {
-        if (recipSteps is null) return recipSteps;
-
-        var ids = recipSteps.Select(n => n.Id);
-
-        var existedSteps = _databaseContext.RecipSteps.Where(n => ids.Contains(n.Id));
-
-        return existedSteps.ToHashSet();
-    }
-
     private ICollection<RecipIngredient> CleanRecipIngredient(ICollection<RecipIngredient> ingredients)
     {
         // Force to update and not create nutriments
@@ -135,36 +96,11 @@ public class RecipsController : ODataController
         return ingredients;
     }
 
-    private ICollection<RecipStep> CleanRecipStep(ICollection<RecipStep> steps)
-    {
-        // Force to update and not create nutriments
-        foreach (var step in steps)
-        {
-            step.Recip = null;
-        }
-
-        return steps;
-    }
-
     private void RemoveMissingIngredients(Recip updatedRecip, Recip? recip)
     {
         var ingredientsToDelete = GetIngredientsToDelete(recip, updatedRecip.RecipIngredients);
 
         if (ingredientsToDelete.Count() != 0) _databaseContext.RecipIngredients.RemoveRange(ingredientsToDelete);
-    }
-
-    private void RemoveMissingSteps(Recip updatedRecip, Recip? recip)
-    {
-        var stepsToDelete = GetStepsToDelete(recip, updatedRecip.RecipSteps);
-
-        if (stepsToDelete.Count() != 0) _databaseContext.RecipSteps.RemoveRange(stepsToDelete);
-    }
-
-    private IEnumerable<RecipStep> GetStepsToDelete(Recip currentRecip, ICollection<RecipStep> expectedSteps)
-    {
-        var stepIdsToDelete = currentRecip.RecipSteps?.Where(n => n.Id == currentRecip.Id && !expectedSteps.Any(e => e.Id == n.Id)).Select(n => n.Id);
-
-        return _databaseContext.RecipSteps.Where(i => i.Id == currentRecip.Id && stepIdsToDelete.Contains(i.Id));
     }
 
     private IEnumerable<RecipIngredient> GetIngredientsToDelete(Recip currentRecip, ICollection<RecipIngredient> expectedIngredients)
