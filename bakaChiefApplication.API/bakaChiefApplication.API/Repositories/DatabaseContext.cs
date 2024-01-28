@@ -51,6 +51,13 @@ namespace bakaChiefApplication.API.Repositories
             modelBuilder.Entity<SelectedRecipHistory>()
                 .HasMany(i => i.Recips)
                 .WithMany(j => j.SelectedRecipHistories);
+                
+           // RECIP TYPE    
+            modelBuilder.Entity<RecipType>()
+                .HasMany(i => i.Recips)
+                .WithOne(j => j.RecipType)
+                .HasForeignKey(e => e.RecipTypeId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         /// <summary>
@@ -82,5 +89,10 @@ namespace bakaChiefApplication.API.Repositories
         /// Gets or sets the <see cref="DbSet{SelectedRecipHistory}"/>.
         /// </summary>
         public virtual DbSet<SelectedRecipHistory> SelectedRecipHistories { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the <see cref="DbSet{RecipType}"/>.
+        /// </summary>
+        public virtual DbSet<RecipType> RecipTypes { get; set; }
     }
 }
