@@ -57,4 +57,20 @@ public class SelectedRecipHistoriesController : ODataController
 
         return Created(selectedRecipHistory);
     }    
+
+    public async Task<ActionResult> Delete([FromRoute] string key)
+    {
+        var selectedRecipHistory = await _databaseContext.SelectedRecipHistories.FirstOrDefaultAsync(n => n.Id == key);
+
+        if (selectedRecipHistory == null)
+        {
+            return NotFound();
+        }
+
+        _databaseContext.SelectedRecipHistories.Remove(selectedRecipHistory);
+
+        await _databaseContext.SaveChangesAsync();
+
+        return NoContent();
+    }
 }
