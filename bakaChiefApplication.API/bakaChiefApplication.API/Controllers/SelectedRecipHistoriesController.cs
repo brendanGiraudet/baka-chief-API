@@ -1,4 +1,6 @@
-﻿using bakaChiefApplication.API.DatabaseModels;
+﻿using bakaChiefApplication.API.Constants;
+using bakaChiefApplication.API.DatabaseModels;
+using bakaChiefApplication.API.Enums;
 using bakaChiefApplication.API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
@@ -34,7 +36,16 @@ public class SelectedRecipHistoriesController : ODataController
 
     public async Task<ActionResult> PostAsync()
     {
-        var recips = _databaseContext.Recips.Take(7);
+        var recipType = _databaseContext.RecipTypes.FirstOrDefault(r => r.Name == RecipTypeEnum.Plat.ToString());
+
+        var recips = _databaseContext.Recips.AsQueryable();
+
+        if(recipType != null)
+        {
+            recips = recips.Where(r => r.RecipTypeId == recipType.Id);
+        }
+
+        recips = recips.Take(RecipConstants.NumberOfSelectedRecip);
 
         var selectedRecipHistory = new SelectedRecipHistory {
             Recips = recips.ToHashSet()
