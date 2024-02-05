@@ -40,6 +40,7 @@ public static class ServiceCollectionExtension
         modelBuilder.EntitySet<Recip>("Recips");
         modelBuilder.EntitySet<SelectedRecipHistory>("SelectedRecipHistories");
         modelBuilder.EntitySet<RecipType>("RecipTypes");
+        modelBuilder.EntitySet<MeasureUnit>("MeasureUnits");
 
         services.AddControllers()
             .AddOData(

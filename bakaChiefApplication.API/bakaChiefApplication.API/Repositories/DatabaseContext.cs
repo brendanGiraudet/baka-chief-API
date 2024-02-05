@@ -58,6 +58,13 @@ namespace bakaChiefApplication.API.Repositories
                 .WithOne(j => j.RecipType)
                 .HasForeignKey(e => e.RecipTypeId)
                 .OnDelete(DeleteBehavior.Cascade);
+                
+            // MEASURE UNIT
+            modelBuilder.Entity<MeasureUnit>()
+                .HasMany(i => i.RecipIngredients)
+                .WithOne(j => j.MeasureUnit)
+                .HasForeignKey(e => e.MeasureUnitId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         /// <summary>
@@ -94,5 +101,10 @@ namespace bakaChiefApplication.API.Repositories
         /// Gets or sets the <see cref="DbSet{RecipType}"/>.
         /// </summary>
         public virtual DbSet<RecipType> RecipTypes { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the <see cref="DbSet{MeasureUnit}"/>.
+        /// </summary>
+        public virtual DbSet<MeasureUnit> MeasureUnits { get; set; }
     }
 }
