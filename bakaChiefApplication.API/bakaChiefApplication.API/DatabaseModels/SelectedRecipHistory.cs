@@ -10,7 +10,7 @@ public class SelectedRecipHistory
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
     [JsonPropertyName("date")]
-    public DateTime Date { get; set; } = DateTime.Now;
+    public DateTime Date { get; set; } = DateTime.UtcNow;
 
     [JsonPropertyName("recips")]
     public ICollection<Recip> Recips { get; set; } = new HashSet<Recip>();
