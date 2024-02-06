@@ -19,7 +19,7 @@ public class RecipIngredient
     public double Quantity { get; set; } = default;
 
     [JsonPropertyName("measureUnitId")]
-    public string? MeasureUnitId { get; set; } = string.Empty;
+    public string? MeasureUnitId { get; set; }
     
     [JsonPropertyName("measureUnit")]
     public MeasureUnit? MeasureUnit { get; set; }
