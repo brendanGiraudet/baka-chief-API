@@ -93,6 +93,7 @@ public class RecipsController : ODataController
         {
             ingred.Ingredient = null;
             ingred.Recip = null;
+            ingred.MeasureUnit = null;
         }
 
         return ingredients;
